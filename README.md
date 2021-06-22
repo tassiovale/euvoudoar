@@ -6,8 +6,8 @@ O projeto euvoudoar.com.br é uma iniciativa filantrópica, cujo objetivo é apr
 
 O repositório está estruturado nas seguintes pastas:
 
-* code: onde é armazenado todo o código fonte da aplicação (front-end e back-end)
-* docs: diretório para armazenamento de arquivos contendo instruções sobre o projeto, informações úteis, apresentações, etc.
+* `code`: onde é armazenado todo o código fonte da aplicação (front-end e back-end)
+* `docs`: diretório para armazenamento de arquivos contendo instruções sobre o projeto, informações úteis, apresentações, etc.
 
 ## Acesso ao servidor
 
