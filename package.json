@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/tassiovale/euvoudoar/issues"
   },
-  "homepage": "https://github.com/tassiovale/euvoudoar#readme"
+  "homepage": "https://github.com/tassiovale/euvoudoar#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
