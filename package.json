@@ -1,0 +1,23 @@
+{
+  "name": "euvoudoar",
+  "version": "1.0.0",
+  "description": "projeto de topicos - UFRB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tassiovale/euvoudoar.git"
+  },
+  "keywords": [
+    "topicos",
+    "euvoudoar"
+  ],
+  "author": "Alunos de Tassio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tassiovale/euvoudoar/issues"
+  },
+  "homepage": "https://github.com/tassiovale/euvoudoar#readme"
+}
