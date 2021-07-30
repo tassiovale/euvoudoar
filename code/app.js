@@ -3,7 +3,7 @@ const app = express();
 
 app.use((req, res, next) => {
     res.status(200).send({
-        mensagem: 'API escutando...'
+        mensagem: 'Eu vou doar - API'
     });
 });
 
