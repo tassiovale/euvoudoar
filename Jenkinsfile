@@ -6,7 +6,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'npm install'
-                sh 'pm2 ./server.js'
+                sh 'pm2 code/server.js'
             }
         }
     }
