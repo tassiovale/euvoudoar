@@ -1,12 +1,20 @@
 
 pipeline {
     agent any
-
     stages {
         stage('Build') {
             steps {
                 sh 'npm install'
-                sh 'pm2 restart all'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Applying changes'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'pm2 restart euvoudoar_server'
             }
         }
     }
