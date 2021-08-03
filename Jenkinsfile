@@ -10,7 +10,12 @@ pipeline {
         stage('Applying') {
             steps {
                 echo 'Applying changes'
-                sh 'pm2 restart euvoudoar_server'
+                // sh 'pm2 restart euvoudoar_server'
+            }
+        }
+        stage('Done') {
+            steps {
+                echo 'Done'
             }
         }
     }
