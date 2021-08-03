@@ -7,14 +7,10 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Test') {
+        stage('Applying') {
             steps {
                 echo 'Applying changes'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                sh 'cd && pm2 restart euvoudoar_server'
+                sh 'pm2 restart euvoudoar_server'
             }
         }
     }
