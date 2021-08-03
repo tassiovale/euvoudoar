@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh 'pm2 restart euvoudoar_server'
+                sh 'cd && pm2 restart euvoudoar_server'
             }
         }
     }
