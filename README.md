@@ -28,3 +28,7 @@ As branches padrão para este repositório são:
 * Senha: G+pg*YDnd9S&u+Ar
 
 O servidor possui a seguinte configuração: Ubuntu server 20.04, 2GB de RAM, 1 CPU, 50GB SSD.
+
+## Acesso ao Namecheap
+* usuário: `euvoudoar`
+* senha: `3uv0udo4r`
