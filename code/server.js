@@ -1,4 +1,4 @@
-const fs = requiere('fs')
+const fs = require('fs')
 const https = require('https');
 
 const app = require('./app')
