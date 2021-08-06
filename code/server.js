@@ -7,9 +7,9 @@ const app = require('./app')
 const port = 3000
 
 const httpsOptions = {
-    cert = fs.readFileSync('./etc/nginx/ssl/api_euvoudoar_com_br_chain.crt'),
-    ca = fs.readFileSync('./etc/nginx/ssl/api_euvoudoar_com_br.ca-bundle'),
-    key = fs.readFileSync('./etc/nginx/ssl/api_euvoudoar.key')
+    cert = fs.readFileSync('/etc/nginx/ssl/api_euvoudoar_com_br_chain.crt'),
+    ca = fs.readFileSync('/etc/nginx/ssl/api_euvoudoar_com_br.ca-bundle'),
+    key = fs.readFileSync('/etc/nginx/ssl/api_euvoudoar.key')
 }
 
 // const port = process.env.port || 3000;
