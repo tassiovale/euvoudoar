@@ -3,7 +3,7 @@ const https = require('https');
 
 const app = require('./app')
 
-const hostname = 'www.api.euvoudoar.com.br';
+// const hostname = 'www.api.euvoudoar.com.br';
 const port = 3000
 
 const httpsOptions = {
@@ -14,4 +14,4 @@ const httpsOptions = {
 
 // const port = process.env.port || 3000;
 const server = https.createServer(httpsOptions, app);
-server.listen(hostname, port);
+server.listen(port);
