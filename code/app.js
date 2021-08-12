@@ -3,7 +3,8 @@ const app = express();
 
 app.use((req, res, next) => {
     res.status(200).send({
-        mensagem: 'Eu vou doar - API'
+        message: 'Eu vou doar - API',
+        date: new Date(),
     });
 });
 
