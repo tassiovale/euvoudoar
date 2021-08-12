@@ -1,17 +1,16 @@
 const fs = require('fs')
 const http = require('http');
-
 const app = require('./app')
 
-// const hostname = 'www.api.euvoudoar.com.br';
-const port = 3000
+const port1 = 3001
+const port2 = 3002
+const port3 = 3003
 
-// const httpsOptions = {
-//     cert: fs.readFileSync('/etc/nginx/ssl/api_euvoudoar_com_br.crt'),
-//     ca: fs.readFileSync('/etc/nginx/ssl/api_euvoudoar_com_br.ca-bundle'),
-//     key: fs.readFileSync('/etc/nginx/ssl/api_euvoudoar.key')
-// }
+const server1 = http.createServer(app);
+server1.listen(port1);
 
-// const port = process.env.port || 3000;
-const server = http.createServer(app);
-server.listen(port);
+const server2 = http.createServer(app);
+server2.listen(port2);
+
+const server3 = http.createServer(app);
+server3.listen(port3);
