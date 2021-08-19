@@ -1,15 +1,16 @@
 
 pipeline {
-    agent any
+    agent { dockerfile true }
     stages {
         stage('Build') {
             steps {
-                sh 'npm install'
+                sh 'docker build . -t euvoudoar/app'
             }
         }
-        stage('Applying') {
+        stage('Running') {
             steps {
-                echo 'Applying changes'
+                echo 'Running Docker'
+                sh 'docker run -d -p 3001:3001 -p 3002:3002 -p 3003:3003 euvoudoar/app'
                 // sh 'pm2 restart euvoudoar_server'
             }
         }
