@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker build . -t euvoudoar/app'
+                sh 'docker build /var/lib/jenkins/workspace/euvoudoar -t euvoudoar/app'
             }
         }
         stage('Running') {
