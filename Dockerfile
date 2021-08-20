@@ -8,8 +8,6 @@ RUN npm install
 
 COPY code ./code
 
-EXPOSE 3001
-EXPOSE 3002
-EXPOSE 3003
+EXPOSE 3001 3002 3003
 
 CMD ["node", "code/server.js" ]
