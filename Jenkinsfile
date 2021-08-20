@@ -8,7 +8,7 @@ pipeline {
                 sh 'docker stop $(docker ps -a -q)'
             }
         }
-        stage('Removing stopped Docket containers')
+        stage('Removing stopped Docker containers')
                 {
                     steps {
                         sh 'docker container prune'

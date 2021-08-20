@@ -32,3 +32,14 @@ O servidor possui a seguinte configuração: Ubuntu server 20.04, 2GB de RAM, 1 
 ## Acesso ao Namecheap
 * usuário: `euvoudoar`
 * senha: `3uv0udo4r`
+
+
+## Endpoint de health check
+`http://{host}:{port}/health`
+
+
+## Docker
+### Build local da imagem
+    docker build . -t euvoudoar/app
+### Rodar Docker local
+    docker run -d -p 3001:3001 -p 3002:3002 -p 3003:3003 euvoudoar/app
