@@ -11,7 +11,7 @@ pipeline {
         stage('Removing stopped Docker containers')
                 {
                     steps {
-                        sh 'docker container prune'
+                        sh 'docker container prune --force'
                     }
                 }
         stage('Build') {
