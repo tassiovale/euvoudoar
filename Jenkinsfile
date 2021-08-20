@@ -2,6 +2,18 @@
 pipeline {
     agent any
     stages {
+        stage('Stop running Docker containers')
+        {
+            steps {
+                sh 'docker stop $(docker ps -a -q)'
+            }
+        }
+        stage('Removing stopped Docket containers')
+                {
+                    steps {
+                        sh 'docker container prune'
+                    }
+                }
         stage('Build') {
             steps {
                 sh 'docker build /var/lib/jenkins/workspace/euvoudoar -t euvoudoar/app'
