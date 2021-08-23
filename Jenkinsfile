@@ -9,20 +9,14 @@ pipeline {
             }
         }
         stage('Removing stopped Docker containers')
-        {
-            steps {
-                sh 'docker container prune --force'
+                {
+                    steps {
+                        sh 'docker container prune --force'
+                    }
                 }
-        }
-        stage('Cleaning old Docker images')
-        {
-        steps {
-                sh 'docker rmi -f $(docker images -f "dangling=true" -q)'
-                }
-        }
         stage('Build') {
             steps {
-                sh 'docker build /var/lib/jenkins/workspace/euvoudoar -t euvoudoar/app:latest'
+                sh 'docker build /var/lib/jenkins/workspace/euvoudoar -t euvoudoar/app'
             }
         }
         stage('Running') {
