@@ -6,7 +6,7 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY code ./code
+ADD ./code /usr/euvoudoar/code
 
 EXPOSE 3001 3002 3003
 
