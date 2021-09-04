@@ -1,0 +1,90 @@
+================= DOCKER =================
+
+GENERAL
+
+docker run redis # run container (create + start)
+
+docker run busybox echo hi there # run container with additional arguments
+
+docker stop 2dc497765dc3 # stop container
+
+docker ps # list running containers
+
+docker ps --all # list all containers
+
+docker system prune # remove all containers and cache
+
+docker run -it tassiovale/simpleweb sh # access terminal inside container
+
+docker run -d -p 4000:4000 tassiovale/gcet555:latest # port forwarding
+
+docker images # list images
+
+docker exec -it beautiful_turing sh # access container
+
+BUILD
+
+docker build .
+
+docker build -t tassiovale/redis:latest . # image from docker file
+
+docker commit -c 'CMD ["redis-server"]' 2dc497765dc3 # manual image generation
+
+PUSH
+
+docker push tassiovale/posts # push image to registry
+
+
+================= KUBERNETES =================
+
+SKAFFOLD
+
+skaffold dev
+
+
+OPERATION
+
+1) docker images' steps
+docker build -t tassiovale/posts .
+docker push tassiovale/posts
+
+2) create deployment
+kubectl apply -f . (or the .yaml file name)
+
+
+USEFUL COMMANDS
+
+kubectl get pods # list all pods (running pods)
+
+kubectl get deployments # list all deployments (created pods)
+
+kubectl get services # list all pods
+
+kubectl describe pod posts-depl-5596f546b4-8w28z # show the detailed deployment info fot the running pod
+
+kubectl logs posts-depl-5596f546b4-8w28z # show the logs of the pod data
+
+kubectl rollout restart deployment event-bus-depl # restart the pod with probably new image
+
+kubectl create secret generic jwt-secret --from-literal=jwt=soGRh5xqpN # generate a k8s object as env variable to all others
+
+
+================= GOOGLE CLOUD =================
+
+INITIAL CONFIGURATION
+
+Create google account > enable Kubernetes Engine and CI/CD Cloud Build
+
+./google-cloud-sdk/install.sh # install gcloud SDK
+
+gcloud auth login # login into the Google account for gcloud
+
+gcloud components install kubectl # install kubernetes to run only remote (no need to install Docker)
+
+gcloud container clusters get-credentials ticketing-dev # get cluster credentials
+
+# to activate ingress nginx to google cloud
+https://kubernetes.github.io/ingress-nginx/deploy/#gce-gke
+
+# check tue gcloud load balancer IP address
+

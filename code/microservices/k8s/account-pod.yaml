@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account-pod
+  name: account-depl
 spec:
   replicas: 1
   selector:
@@ -15,11 +15,17 @@ spec:
       containers:
         - name: account
           image: tassiovale/euvoudoar-account
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: euvoudoar-jwt
+                  key: JWT_KEY
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: account-service
+  name: account-srv
 spec:
   selector:
     app: account

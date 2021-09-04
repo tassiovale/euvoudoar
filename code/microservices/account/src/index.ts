@@ -1,27 +1,24 @@
-import express from 'express';
-import { json } from 'body-parser';
-
-const app = express();
-
-app.use(json());
-
-const router = express.Router();
-
-router.get('/api/account/hello', (req, res, next) => {
-    res.status(200).send({
-        message: 'hello'
-    });
-});
-
-app.use(router);
+import mongoose from 'mongoose';
+import { app } from './app';
 
 const start = async () => {
-    app.listen(
-        3000, 
-        () => {
-            console.log('Servidor rodando na porta 3000')
-        }
-    );
+    if (!process.env.JWT_KEY) {
+        throw new Error('JWT_KEY must be defined');
+    }
+    try {
+        await mongoose.connect('mongodb://account-mongo-srv:27017/account', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useCreateIndex: true
+        });
+        console.log('Successfully connected to MongoDB!');
+    } catch(err) {
+        console.error(err);
+    }
+
+    app.listen(3000, () =>{
+        console.log('Server listening on 3000!');
+    });
 };
 
 start();
