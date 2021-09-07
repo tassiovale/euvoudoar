@@ -66,7 +66,7 @@ kubectl logs posts-depl-5596f546b4-8w28z # show the logs of the pod data
 
 kubectl rollout restart deployment event-bus-depl # restart the pod with probably new image
 
-kubectl create secret generic jwt-secret --from-literal=jwt=soGRh5xqpN # generate a k8s object as env variable to all others
+kubectl create secret generic euvoudoar-jwt-secret --from-literal=JWT_KEY=soGRh5xqpN # generate a k8s object as env variable to all others
 
 
 ================= GOOGLE CLOUD =================
