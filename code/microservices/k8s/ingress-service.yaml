@@ -7,13 +7,20 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
-    - host: euvoudoar.com.br
+    - host: euvoudoarteste.com.br
       http:
         paths:
           - path: /api/account/?(.*)
             pathType: Prefix
             backend:
               service:
-                name: account-service
+                name: account-srv
+                port:
+                  number: 3000
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: euvoudoar-client-srv
                 port:
                   number: 3000
