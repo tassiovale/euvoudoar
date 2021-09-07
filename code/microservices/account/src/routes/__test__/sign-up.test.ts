@@ -3,7 +3,7 @@ import { app } from '../../app';
 
 it('returns a 201 on successful signup', async () => {
     return request(app)
-        .post('/api/users/sign_up')
+        .post('/api/account/sign_up')
         .send({
             email: 'teste@teste.com',
             password: '123456'
@@ -13,7 +13,7 @@ it('returns a 201 on successful signup', async () => {
 
 it('returns a 400 with an invalid email', async () => {
     return request(app)
-        .post('/api/users/sign_up')
+        .post('/api/account/sign_up')
         .send({
             email: 'teste@teste',
             password: '123456'
@@ -23,7 +23,7 @@ it('returns a 400 with an invalid email', async () => {
 
 it('returns a 400 with an invalid password', async () => {
     return request(app)
-        .post('/api/users/sign_up')
+        .post('/api/account/sign_up')
         .send({
             email: 'teste@teste.com',
             password: '123'
@@ -33,7 +33,7 @@ it('returns a 400 with an invalid password', async () => {
 
 it('returns a 400 with the missing email parameter', async () => {
     return request(app)
-        .post('/api/users/sign_up')
+        .post('/api/account/sign_up')
         .send({
             password: '123456'
         })
@@ -42,7 +42,7 @@ it('returns a 400 with the missing email parameter', async () => {
 
 it('returns a 400 with the missing password parameter', async () => {
     return request(app)
-        .post('/api/users/sign_up')
+        .post('/api/account/sign_up')
         .send({
             email: 'email@email.com'
         })
@@ -51,7 +51,7 @@ it('returns a 400 with the missing password parameter', async () => {
 
 it('disallows duplicate emails', async () => {
     await request(app)
-        .post('/api/users/sign_up')
+        .post('/api/account/sign_up')
         .send({
             email: 'teste@teste.com',
             password: '123456'
@@ -59,7 +59,7 @@ it('disallows duplicate emails', async () => {
         .expect(201);
 
     await request(app)
-        .post('/api/users/sign_up')
+        .post('/api/account/sign_up')
         .send({
             email: 'teste@teste.com',
             password: '123456'
@@ -69,7 +69,7 @@ it('disallows duplicate emails', async () => {
 
 it('sets a cookie after successful signup', async () => {
     const response = await request(app)
-        .post('/api/users/sign_up')
+        .post('/api/account/sign_up')
         .send({
             email: 'teste@teste.com',
             password: '123456'

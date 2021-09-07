@@ -13,7 +13,7 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
 
 AppComponent.getInitialProps = async ({ ctx, Component }) => {
   const client = buildClient(ctx);
-  const { data } = await client.get('/api/users/current_user');
+  const { data } = await client.get('/api/account/current_user');
 
   let pageProps;
   if (Component.getInitialProps) {

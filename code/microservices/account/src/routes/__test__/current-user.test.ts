@@ -3,7 +3,7 @@ import { app } from '../../app';
 
 it('responds with details about the current user', async () => {        
     const response = await request(app)
-        .get('/api/users/current_user')
+        .get('/api/account/current_user')
         .set('Cookie', await global.signin())
         .send()
         .expect(200);
@@ -13,7 +13,7 @@ it('responds with details about the current user', async () => {
 
 it('responds with a null current user if not authenticated', async () => {        
     const response = await request(app)
-        .get('/api/users/current_user')
+        .get('/api/account/current_user')
         .send()
         .expect(200);
 
