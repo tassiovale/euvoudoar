@@ -3,8 +3,8 @@ import { Password } from '../services/password';
 
 // required properties of a user (TS type checking)
 interface UserAttributes {
-    email: string,
-    password: string
+    email: string;
+    password: string;
 }
 
 // properties of a user model (collection)

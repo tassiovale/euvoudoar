@@ -17,6 +17,13 @@ spec:
                 name: account-srv
                 port:
                   number: 3000
+          - path: /api/donations/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: donations-srv
+                port:
+                  number: 3000
           - path: /?(.*)
             pathType: Prefix
             backend:

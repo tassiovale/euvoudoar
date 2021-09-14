@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: donations-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: donations
+  template:
+    metadata:
+      labels:
+        app: donations
+    spec:
+      containers:
+        - name: donations
+          image: tassiovale/euvoudoar-donations
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: euvoudoar-jwt-secret
+                  key: JWT_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: donations-srv
+spec:
+  selector:
+    app: donations
+  ports:
+    - name: donations
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

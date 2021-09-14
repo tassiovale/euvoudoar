@@ -3,12 +3,10 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
-import { currentUserRouter  } from './routes/current-user';
-import { signInRouter  } from './routes/sign-in';
-import { signOutRouter  } from './routes/sign-out';
-import { signUpRouter  } from './routes/sign-up';
+import { createRouter  } from './routes/create';
 
 import { errorHandler } from './middlewares/error-handler';
+import { currentUser } from './middlewares/current-user';
 import { NotFoundError } from './errors/not-found-error';
 
 const app = express();
@@ -23,10 +21,9 @@ app.use(
     })
 );
 
-app.use(currentUserRouter);
-app.use(signInRouter);
-app.use(signOutRouter);
-app.use(signUpRouter);
+app.use(currentUser);
+
+app.use(createRouter);
 
 app.all('*', async () =>  {
     throw new NotFoundError();

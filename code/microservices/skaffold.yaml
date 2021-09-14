@@ -16,6 +16,14 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: tassiovale/euvoudoar-donations
+      context: donations
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: tassiovale/euvoudoar-client
       context: client
       docker:
