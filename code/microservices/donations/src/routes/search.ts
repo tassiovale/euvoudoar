@@ -18,4 +18,20 @@ router.get(
   }
 );
 
+router.get(
+  "/api/donationsByDescription/:description",
+  requireAuth,
+  validateRequest,
+  async (req: Request, res: Response) => {
+    const { description } = req.params;
+
+    const existingDonations = await Donation.find({
+      description,
+    });
+
+    res.status(200).send(existingDonations);
+  }
+);
+
+
 export { router as searchRouter };
