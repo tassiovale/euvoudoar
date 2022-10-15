@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Projeto euvoudoar: plataforma de suporte à instituições filantrópicas",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon index.js",
     "test": "node index.js",
