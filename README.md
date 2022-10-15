@@ -18,28 +18,3 @@ As branches padrão para este repositório são:
 * **main**: contém o código fonte de produção. Utilizará a branch `develop` para ser atualizada.
 
 * **develop**: branch que acomoda a cópia mais recente do trabalho desenvolvido e testado pelos desenvolvedores. Esta é a branch na qual o desenvolvedor irá criar sua própria branch, e é o destino para o qual o desenvolvedor deverá fazer o merge da sua tarefa finalizada.
-
-[CLIQUE AQUI PARA ACESSAR UM TUTORIAL BÁSICO DE COMANDOS PARA USO DO GIT NESTE PROJETO](docs/tutorials/GIT_BASIC_USAGE.md)
-
-## Acesso ao servidor
-
-* IP: 192.241.138.76
-* Comando: `ssh root@192.241.138.76`
-* Senha: G+pg*YDnd9S&u+Ar
-
-O servidor possui a seguinte configuração: Ubuntu server 20.04, 2GB de RAM, 1 CPU, 50GB SSD.
-
-## Acesso ao Namecheap
-* usuário: `euvoudoar`
-* senha: `3uv0udo4r`
-
-
-## Endpoint de health check
-`http://{host}:{port}/health`
-
-
-## Docker
-### Build local da imagem
-    docker build . -t euvoudoar/app
-### Rodar Docker local
-    docker run -d -p 3001:3001 -p 3002:3002 -p 3003:3003 euvoudoar/app
