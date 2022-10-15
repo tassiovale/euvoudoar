@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('API euvoudoar')
 })
 
 const port = process.env.SERVER_PORT
