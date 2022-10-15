@@ -18,3 +18,13 @@ As branches padrão para este repositório são:
 * **main**: contém o código fonte de produção. Utilizará a branch `develop` para ser atualizada.
 
 * **develop**: branch que acomoda a cópia mais recente do trabalho desenvolvido e testado pelos desenvolvedores. Esta é a branch na qual o desenvolvedor irá criar sua própria branch, e é o destino para o qual o desenvolvedor deverá fazer o merge da sua tarefa finalizada.
+
+## Estrutura da API
+
+* `institutions`: gerenciamento do status e dados das instituições
+
+* `donations`: configuração da doação (ex.: definição da instituição, valor, recorrência, etc.)
+
+* `payments`: processamento de pagamentos utilizando um gateway qualquer
+
+* `withdraws`: recebimentos das quantias pelas instituições
