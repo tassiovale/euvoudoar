@@ -1,13 +1,8 @@
 import dotenv from 'dotenv'
-import express from 'express'
 import _ from 'lodash'
-import userRoutes from './src/routes/users/index.js'
+import { app } from './app.js'
 
 dotenv.config()
-const app = express()
-app.use(express.json())
-
-app.use(userRoutes)
 
 const port = process.env.SERVER_PORT
 app.listen(port, () => {
