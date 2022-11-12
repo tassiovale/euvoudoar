@@ -1,8 +1,7 @@
 import express from 'express'
-import { v4 as uuidv4 } from 'uuid'
 import { body } from 'express-validator'
 import { HTTP_STATUS_CREATED } from '../../constants/httpStatusCodes.js'
-import { getUsers, setUsers } from '../../helpers/fakeDatabase.js'
+import { createUser } from '../../db/user.js'
 import { validateRequest } from '../../middlewares/validateRequest.js'
 
 const router = express.Router()
@@ -18,17 +17,9 @@ router.post(
             .withMessage('E-mail inválido'),
     ],
     validateRequest,
-    (req, res) => {        
-        const users = getUsers()
-        const { name, email } = req.body
-        const user = {
-            id: uuidv4(),
-            name,
-            email
-        }
-        users.push(user)
-        setUsers(users)
-        res.status(HTTP_STATUS_CREATED).send(user)
+    async (req, res) => {        
+        const createdUser = await createUser(req.body)
+        res.status(HTTP_STATUS_CREATED).send(createdUser)
     }
 )
 

@@ -1,17 +1,12 @@
 import _ from 'lodash'
 import express from 'express'
-import { getUsers } from '../../helpers/fakeDatabase.js'
+import { searchUsers } from '../../db/user.js'
 
 const router = express.Router()
 
-router.get('/users', (req, res) => {
-    const users = getUsers()
-    if (_.isEmpty(req.query)) {
-        res.send(users)
-    } else {
-        const filteredUsers = _.filter(users, req.query)
-        res.send(filteredUsers)
-    }
+router.get('/users', async (req, res) => {
+    const users = await searchUsers(req.query)
+    res.send(users)
 })
 
 export { router as searchRouter }
