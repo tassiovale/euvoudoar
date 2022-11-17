@@ -12,6 +12,20 @@ const createUser = async (user) => {
     )
     return createdUser
 }
+const deleteUser = async (id) => {
+    return databaseClientInstance.user.delete({
+        where: {
+          id,
+        }
+    })
+}
+const findById = async (id) => {
+    return databaseClientInstance.user.findUnique({
+        where: {
+          id: id,
+        },
+      })
+}
 
 const searchUsers = async (where) => {
     const { page, limit } = where
@@ -41,5 +55,7 @@ const searchUsers = async (where) => {
 
 export { 
     createUser,
-    searchUsers
+    searchUsers,
+    deleteUser,
+    findById
 }

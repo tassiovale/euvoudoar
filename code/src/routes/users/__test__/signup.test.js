@@ -1,5 +1,6 @@
 import request from 'supertest'
 import { app } from '../../../../app.js'
+import {randomWord} from '../../../helpers/utils'
 
 it(
     'returns 201 on successful signup',
@@ -8,7 +9,7 @@ it(
             .post('/users')
             .send({
                 name: 'Tassio Valle',
-                email: 'tassio.vale@ufrb.edu.br'
+                email: randomWord(10)+'@ufrb.edu.br'
             })
             .expect(201)
     }
