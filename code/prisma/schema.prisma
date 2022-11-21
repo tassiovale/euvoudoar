@@ -8,23 +8,48 @@ datasource db {
 }
 
 model User {
-  id    String     @id @default(uuid())
-  email String  @unique
+  id    String  @id @default(uuid())
+  email String
   name  String?
-  roles UserHasRole[]
+  role String @default("USER")
+
+  institutionsCreated Institution[] @relation("createdBy")
+  institutionsUpdated Institution[] @relation("updatedBy")
+  institutionsDeleted Institution[] @relation("deletedBy")
 }
 
-model Role {
+model Institution {
+  id  String  @id @default(uuid())
+  name String
+  cnpj String @unique
+  paymentGateway PaymentGateway?
+  description String
+  images Image[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  deletedAt DateTime?
+
+  createdBy User @relation(name:"createdBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId String
+
+  updatedBy User? @relation(name:"updatedBy",fields: [updaterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updaterId String?
+
+  deletedBy User? @relation(name:"deletedBy",fields: [deleterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deleterId String?
+}
+
+model Image {
   id Int @id @default(autoincrement())
-  name String @unique
-  users UserHasRole[]
+  url String
+  institution Institution @relation(fields: [institutionId], references:[id], onDelete: Cascade, onUpdate: Cascade)
+  institutionId String 
 }
 
-model UserHasRole {
-  user  User  @relation(fields: [userId], references: [id])
-  userId  String
-  role  Role @relation(fields: [roleId], references: [id])
-  roleId Int
-
-  @@id([userId, roleId])
+model PaymentGateway {
+  type String
+  apiKey String @id @unique
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  institutionId String @unique
 }

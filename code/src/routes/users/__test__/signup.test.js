@@ -9,7 +9,8 @@ it(
             .post('/users')
             .send({
                 name: 'Tassio Valle',
-                email: randomWord(10)+'@ufrb.edu.br'
+                email: randomWord(10)+'@ufrb.edu.br',
+                role: "ADMIN"
             })
             .expect(201)
     }

@@ -19,11 +19,19 @@ const deleteUser = async (id) => {
         }
     })
 }
-const findById = async (id) => {
+const findUserById = async (id) => {
     return databaseClientInstance.user.findUnique({
         where: {
-          id: id,
+            id
+        }
+      })
+}
+const updateUser = async(user) => {
+    return await prisma.user.update({
+        where: {
+          id: user.id,
         },
+        data: user,
       })
 }
 
@@ -57,5 +65,6 @@ export {
     createUser,
     searchUsers,
     deleteUser,
-    findById
+    findUserById,
+    updateUser
 }
