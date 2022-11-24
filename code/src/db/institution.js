@@ -18,7 +18,14 @@ const findInsitutionByCNPJ = async(cnpj) => {
         }
       })
 }
+
+const findInsitutionById = async (id) => {
+    return databaseClientInstance.institution.findUnique({
+        where: { id }
+    })
+}
 export { 
     createInstitution,
+    findInsitutionById,
     findInsitutionByCNPJ
 }
