@@ -11,45 +11,79 @@ model User {
   id    String  @id @default(uuid())
   email String
   name  String?
-  role String @default("USER")
+  role  String  @default("USER")
 
-  institutionsCreated Institution[] @relation("createdBy")
-  institutionsUpdated Institution[] @relation("updatedBy")
-  institutionsDeleted Institution[] @relation("deletedBy")
+  institutionsCreated     Institution[]     @relation("createdBy")
+  institutionsUpdated     Institution[]     @relation("updatedBy")
+  institutionsDeleted     Institution[]     @relation("deletedBy")
+  donationsProfileCreated DonationProfile[] @relation("createdBy")
+  donationsProfileUpdated DonationProfile[] @relation("updatedBy")
+  donationsProfileDeleted DonationProfile[] @relation("deletedBy")
 }
 
 model Institution {
-  id  String  @id @default(uuid())
-  name String
-  cnpj String @unique
+  id             String          @id @default(uuid())
+  name           String
+  cnpj           String          @unique
   paymentGateway PaymentGateway?
-  description String
-  images Image[]
+  description    String
+  images         Image[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
   deletedAt DateTime?
 
-  createdBy User @relation(name:"createdBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdBy User   @relation(name: "createdBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   creatorId String
 
-  updatedBy User? @relation(name:"updatedBy",fields: [updaterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy User?   @relation(name: "updatedBy", fields: [updaterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   updaterId String?
 
-  deletedBy User? @relation(name:"deletedBy",fields: [deleterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy User?   @relation(name: "deletedBy", fields: [deleterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deleterId String?
+
+  DonationProfile DonationProfile[]
 }
 
 model Image {
-  id Int @id @default(autoincrement())
-  url String
-  institution Institution @relation(fields: [institutionId], references:[id], onDelete: Cascade, onUpdate: Cascade)
-  institutionId String 
+  id            Int         @id @default(autoincrement())
+  url           String
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  institutionId String
 }
 
 model PaymentGateway {
-  type String
-  apiKey String @id @unique
+  type          String
+  apiKey        String      @id @unique
+  institution   Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  institutionId String      @unique
+}
+
+enum Recurrence {
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+model DonationProfile {
+  id                       String     @id @default(uuid())
+  name                     String
+  recurrence               Recurrence @default(WEEKLY)
+  recurrenceExpirationDate DateTime
+  institutionId            String
+
   institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  institutionId String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  deletedAt DateTime?
+
+  createdBy User   @relation(name: "createdBy", fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  creatorId String
+
+  updatedBy User?   @relation(name: "updatedBy", fields: [updaterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updaterId String?
+
+  deletedBy User?   @relation(name: "deletedBy", fields: [deleterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deleterId String?
 }
