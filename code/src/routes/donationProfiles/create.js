@@ -4,7 +4,7 @@ import { validateRequest } from "../../middlewares/validateRequest.js";
 import { ADMIN } from "../../constants/roles.js";
 import { findUserById } from "../../db/user.js";
 import { findInsitutionById } from "../../db/institution.js";
-import { HTTP_STATUS_NOT_FOUND } from "../../constants/httpStatusCodes.js";
+import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_UNAUTHORIZED } from "../../constants/httpStatusCodes.js";
 import { createDonationProfile } from "../../db/donationProfile.js";
 
 const router = express.Router();
@@ -34,12 +34,14 @@ router.post(
         .json({ error: "Instituição não encontrada" });
 
     const user = await findUserById(req.userId);
-
-    if (user.role == null || user.role != ADMIN)
+    
+    
+    if (user.role == null || user.role != ADMIN || institution.creatorId != user.id)
       return res.status(HTTP_STATUS_UNAUTHORIZED).json({
         error: "Você não tem permissões necessárias para fazer esta operação.",
       });
-
+    
+    
     const donationProfile = await createDonationProfile({
       name,
       institution: {
