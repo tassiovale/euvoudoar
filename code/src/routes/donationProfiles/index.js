@@ -1,8 +1,10 @@
 
 import createRouter from './create.js'
+import updateRouter from './update.js'
 
 const routesDonationProfil = [
-    createRouter
+    createRouter,
+    updateRouter
 ]
 
 export default routesDonationProfil 

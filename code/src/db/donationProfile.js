@@ -10,7 +10,21 @@ const createDonationProfile = async (donationProfile) => {
     )
 }
 
+const updateDonationProfile = async (donationProfile, donationProfilesId) => {
+
+    return await databaseClientInstance.donationProfile.update(
+        {
+            where: {
+                id: donationProfilesId
+            },
+            data: donationProfile,
+
+        }
+    )
+}
+
 
 export {
-    createDonationProfile
+    createDonationProfile,
+    updateDonationProfile
 }
