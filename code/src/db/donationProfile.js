@@ -23,8 +23,19 @@ const updateDonationProfile = async (donationProfile, donationProfilesId) => {
     )
 }
 
+const findDonationProfileById = async ( donationProfilesId) => {
+
+    return await databaseClientInstance.donationProfile.findUnique(
+        {
+            where: {
+                id: donationProfilesId
+            }
+        }
+    )
+}
 
 export {
     createDonationProfile,
-    updateDonationProfile
+    updateDonationProfile,
+    findDonationProfileById
 }
