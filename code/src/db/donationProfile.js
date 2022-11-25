@@ -23,7 +23,7 @@ const updateDonationProfile = async (donationProfile, donationProfilesId) => {
     )
 }
 
-const findDonationProfileById = async ( donationProfilesId) => {
+const findDonationProfileById = async (donationProfilesId) => {
 
     return await databaseClientInstance.donationProfile.findUnique(
         {
@@ -34,8 +34,19 @@ const findDonationProfileById = async ( donationProfilesId) => {
     )
 }
 
+const findDonationProfilePages = async (page, limit) => {
+
+    return await databaseClientInstance.donationProfile.findMany({
+
+        skip: Number(page),
+        take: Number(limit),
+
+    })
+}
+
 export {
     createDonationProfile,
     updateDonationProfile,
-    findDonationProfileById
+    findDonationProfileById,
+    findDonationProfilePages
 }
