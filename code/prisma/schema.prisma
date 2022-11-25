@@ -16,6 +16,10 @@ model User {
   institutionsCreated Institution[] @relation("createdBy")
   institutionsUpdated Institution[] @relation("updatedBy")
   institutionsDeleted Institution[] @relation("deletedBy")
+  donateCreated Donate[] @relation("createdBy")
+  donateUpdated Donate[] @relation("updatedBy")
+  donateDeleted Donate[] @relation("deletedBy")
+  donor Donate[] @relation("donorId")
 }
 
 model Institution {
@@ -38,6 +42,8 @@ model Institution {
 
   deletedBy User? @relation(name:"deletedBy",fields: [deleterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deleterId String?
+
+  Donate Donate[]
 }
 
 model Image {
@@ -52,4 +58,37 @@ model PaymentGateway {
   apiKey String @id @unique
   institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   institutionId String @unique
+}
+
+enum Status {
+  PENDING
+  CANCELED
+  PAID
+}
+
+model Donate {
+  id                       String     @id @default(uuid())
+  
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  institutionId            String
+  
+  donor User @relation(name: "donorId", fields: [donorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  donorId                  String
+
+  recurrence               String?
+  recurrenceExpirationDate DateTime?
+  value                    Float
+  status                   Status @default(PENDING)
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @default(now())
+  deletedAt                DateTime?
+
+  creatorId User @relation(name: "createdBy", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdBy                String
+
+  updaterId User? @relation(name: "updatedBy", fields: [updatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy                String
+
+  deleterId User?   @relation(name: "deletedBy", fields: [deletedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy                String?
 }
