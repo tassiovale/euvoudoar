@@ -1,8 +1,8 @@
 import express from 'express'
 import { body } from 'express-validator'
-import { HTTP_STATUS_CONFLIT, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_CREATED} from '../../constants/httpStatusCodes.js'
+import { HTTP_STATUS_CONFLIT, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_CREATED } from '../../constants/httpStatusCodes.js'
 import { findUserById } from '../../db/user.js'
-import {createInstitution, findInsitutionByCNPJ} from '../../db/institution.js'
+import { createInstitution, findInstitutionByCNPJ } from '../../db/institution.js'
 import { validateRequest } from '../../middlewares/validateRequest.js'
 import { ADMIN } from '../../constants/roles.js'
 
@@ -25,47 +25,48 @@ router.post(
     async (req, res) => {
         const user = await findUserById(req.userId)
 
-        if (user.role == null || user.role != ADMIN){
-            var resp = {...req.body}
+        if (user.role == null || user.role != ADMIN) {
+            var resp = { ...req.body }
             resp.error = "Você não tem permissões necessárias para fazer esta operação."
             res.status(HTTP_STATUS_UNAUTHORIZED).send(resp)
-        }else{
+        } else {
 
-            const institutionAlready = await findInsitutionByCNPJ(req.body.cnpj)
+            const institutionAlready = await findInstitutionByCNPJ(req.body.cnpj)
 
-            if (institutionAlready != null){
-                var resp = {...req.body}
-                resp.error = "Esta insituição já existe."
+            if (institutionAlready != null) {
+                var resp = { ...req.body }
+                resp.error = "Esta instituição já existe."
                 res.status(HTTP_STATUS_CONFLIT).send(resp)
-            }else{
-                
+            } else {
+
                 var images = []
 
-                for (var i = 0; i < req.body.images.length; i++){
+                for (var i = 0; i < req.body.images.length; i++) {
                     images.push({
                         url: req.body.images[i]
                     })
                 }
-                
-                var institution = {name: req.body.name,
-                                cnpj: req.body.cnpj,
-                                paymentGateway: {
-                                            create: req.body.paymentGateway
-                                },
-                                description: req.body.description,
-                                images: {
-                                    create: images
-                                },
-                                createdBy: {
-                                    connect: {id:user.id}
-                                },
-                                updatedBy: {
-                                    connect: {id:user.id}
-                                }
+
+                var institution = {
+                    name: req.body.name,
+                    cnpj: req.body.cnpj,
+                    paymentGateway: {
+                        create: req.body.paymentGateway
+                    },
+                    description: req.body.description,
+                    images: {
+                        create: images
+                    },
+                    createdBy: {
+                        connect: { id: user.id }
+                    },
+                    updatedBy: {
+                        connect: { id: user.id }
+                    }
                 }
 
                 const institutionCreated = await createInstitution(institution)
-                
+
                 res.status(HTTP_STATUS_CREATED).send(institutionCreated)
 
             }

@@ -10,7 +10,7 @@ const createInstitution = async (institution) => {
     )
 }
 
-const findInsitutionByCNPJ = async (cnpj) => {
+const findInstitutionByCNPJ = async (cnpj) => {
 
     return databaseClientInstance.institution.findUnique({
         where: {
@@ -19,13 +19,21 @@ const findInsitutionByCNPJ = async (cnpj) => {
     })
 }
 
-const findInsitutionById = async (id) => {
+const findInstitutionById = async (id) => {
     return databaseClientInstance.institution.findUnique({
         where: { id }
     })
 }
+
+const deleteInstitutionById = async (id) => {
+    return databaseClientInstance.institution.delete({
+        where: { id }
+    })
+}
+
 export {
     createInstitution,
-    findInsitutionById,
-    findInsitutionByCNPJ
+    findInstitutionByCNPJ,
+    findInstitutionById,
+    deleteInstitutionById
 }
