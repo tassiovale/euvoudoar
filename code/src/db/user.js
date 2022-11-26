@@ -1,8 +1,7 @@
+import { getSkipValueFromQuery, getTakeValueFromQuery } from '../helpers/paginationData.js'
 import { getDatabaseClientInstance } from './clientInstance.js'
 
 const databaseClientInstance = getDatabaseClientInstance()
-const defaultPageSize = parseInt(process.env.DEFAULT_PAGE_SIZE)
-const defaultPageNumber = parseInt(process.env.DEFAULT_PAGE_NUMBER)
 
 const createUser = async (user) => {
     const createdUser = await databaseClientInstance.user.create(
@@ -36,9 +35,6 @@ const updateUser = async(user) => {
 }
 
 const searchUsers = async (where) => {
-    const { page, limit } = where
-    const take = parseInt(limit) || defaultPageSize
-    const skip = parseInt(page || defaultPageNumber) * take
     const users = await databaseClientInstance.user.findMany(
         { 
             where: {
@@ -54,8 +50,8 @@ const searchUsers = async (where) => {
                     name: 'asc',
                 }
             ],
-            skip,
-            take
+            skip: getSkipValueFromQuery(where),
+            take: getTakeValueFromQuery(where)
         }
     )
     return users

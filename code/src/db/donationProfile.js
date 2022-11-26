@@ -1,3 +1,4 @@
+import { getSkipValueFromQuery, getTakeValueFromQuery } from '../helpers/paginationData.js'
 import { getDatabaseClientInstance } from './clientInstance.js'
 
 const databaseClientInstance = getDatabaseClientInstance()
@@ -34,13 +35,10 @@ const findDonationProfileById = async (donationProfilesId) => {
     )
 }
 
-const findDonationProfilePages = async (page, limit) => {
-
+const findDonationProfilePages = async (where) => {
     return await databaseClientInstance.donationProfile.findMany({
-
-        skip: Number(page),
-        take: Number(limit),
-
+        skip: getSkipValueFromQuery(where),
+        take: getTakeValueFromQuery(where)
     })
 }
 
