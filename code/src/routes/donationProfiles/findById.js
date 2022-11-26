@@ -2,7 +2,7 @@ import _ from 'lodash'
 import express from 'express'
 import { ADMIN } from "../../constants/roles.js";
 import { findUserById } from "../../db/user.js";
-import { findInsitutionById } from "../../db/institution.js";
+import { findInstitutionById } from "../../db/institution.js";
 import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_UNAUTHORIZED } from "../../constants/httpStatusCodes.js";
 import { findDonationProfileById } from "../../db/donationProfile.js";
 
@@ -13,7 +13,7 @@ router.get('/institutions/:institutionId/donation_profiles/:donationProfilesId',
 
         const institutionId = req.params.institutionId;
         const donationProfilesId = req.params.donationProfilesId;
-        const institution = await findInsitutionById(institutionId);
+        const institution = await findInstitutionById(institutionId);
 
         if (!institution)
             return res
