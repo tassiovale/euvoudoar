@@ -19,6 +19,10 @@ model User {
   donationsProfileCreated DonationProfile[] @relation("createdBy")
   donationsProfileUpdated DonationProfile[] @relation("updatedBy")
   donationsProfileDeleted DonationProfile[] @relation("deletedBy")
+  donateCreated Donate[] @relation("createdBy")
+  donateUpdated Donate[] @relation("updatedBy")
+  donateDeleted Donate[] @relation("deletedBy")
+  donor Donate[] @relation("donorId")
 }
 
 model Institution {
@@ -43,6 +47,7 @@ model Institution {
   deleterId String?
 
   DonationProfile DonationProfile[]
+  Donate Donate[]
 }
 
 model Image {
@@ -86,4 +91,37 @@ model DonationProfile {
 
   deletedBy User?   @relation(name: "deletedBy", fields: [deleterId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   deleterId String?
+}
+
+enum Status {
+  PENDING
+  CANCELED
+  PAID
+}
+
+model Donate {
+  id                       String     @id @default(uuid())
+  
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  institutionId            String
+  
+  donor User @relation(name: "donorId", fields: [donorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  donorId                  String
+
+  recurrence               String?
+  recurrenceExpirationDate DateTime?
+  value                    Float
+  status                   Status @default(PENDING)
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @default(now())
+  deletedAt                DateTime?
+
+  creatorId User @relation(name: "createdBy", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdBy                String
+
+  updaterId User? @relation(name: "updatedBy", fields: [updatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  updatedBy                String
+
+  deleterId User?   @relation(name: "deletedBy", fields: [deletedBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  deletedBy                String?
 }
