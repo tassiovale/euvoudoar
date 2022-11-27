@@ -31,9 +31,17 @@ const deleteInstitutionById = async (id) => {
     })
 }
 
+const updateInstitutionById = async(institution, id) => {
+    return await databaseClientInstance.institution.update({
+        where: { id },
+        data: institution
+    })
+}
+
 export {
     createInstitution,
     findInstitutionByCNPJ,
     findInstitutionById,
-    deleteInstitutionById
+    deleteInstitutionById,
+    updateInstitutionById
 }

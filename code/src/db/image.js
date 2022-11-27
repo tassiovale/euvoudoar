@@ -10,6 +10,13 @@ const findImageByInstitutionId = async (institutionId) => {
     })
 }
 
+const deleteImageById = async (imageId) => {
+    return await databaseClientInstance.image.delete({
+        where: { id: imageId }
+    })
+}
+
 export {
-    findImageByInstitutionId
+    findImageByInstitutionId,
+    deleteImageById
 }

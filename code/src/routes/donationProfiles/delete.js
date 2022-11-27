@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import express from 'express'
-import {deletedonationProfile, findDonationProfileById} from '../../db/donationProfile.js'
-import findUserById from '../../db/user.js'
+import { deleteDonationProfile, findDonationProfileById } from '../../db/donationProfile.js'
+import { findUserById } from '../../db/user.js'
 
 const router = express.Router()
 
