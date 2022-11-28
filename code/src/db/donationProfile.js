@@ -11,6 +11,14 @@ const createDonationProfile = async (donationProfile) => {
     )
 }
 
+const deleteDonationProfile = async (id) => {
+    return databaseClientInstance.donationProfile.delete({
+        where: {
+          id,
+        }
+    })
+}
+
 const updateDonationProfile = async (donationProfile, donationProfilesId) => {
 
     return await databaseClientInstance.donationProfile.update(
@@ -46,5 +54,6 @@ export {
     createDonationProfile,
     updateDonationProfile,
     findDonationProfileById,
-    findDonationProfilePages
+    findDonationProfilePages,
+    deleteDonationProfile
 }
