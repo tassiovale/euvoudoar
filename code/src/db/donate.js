@@ -12,6 +12,60 @@ const createDonate = async (donate) => {
     )
     return createdDonate
 }
+
+const searchPagedDonations = async (where) => {
+    //console.log('where.data: '+where.data)
+    const { keyword } = where
+    //console.log('keyword: '+keyword)
+    const { page, limit } = where
+    const take = parseInt(limit) || defaultPageSize
+    const skip = parseInt(page || defaultPageNumber) * take
+
+    const donor = await databaseClientInstance.user.findMany({
+        where: {
+            name: keyword
+        }
+    })
+
+    const institution = await databaseClientInstance.institution.findMany({
+        where: {
+            name: keyword
+        }
+    })
+
+    console.log(institution)
+    console.log(donor)
+
+    const donorIds = donor.map((donor)=>{
+        return donor.id
+    })
+
+    const institutionIds = institution.map((institution)=>{
+        return institution.id
+    })
+
+    console.log('donorIds: ' + donorIds)
+    console.log('institutionIds: ' + institutionIds)
+
+    console.log('donor.id: ' + donor.id)
+    console.log('institution.id: ' + institution.id)
+
+    const donations = await databaseClientInstance.donate.findMany(
+        { 
+            where: {
+                OR: [
+                  { donorId: {in: donorIds}  },
+                  { institutionId: {in: institutionIds} },
+                ]
+            },
+            skip,
+            take
+        }
+    )
+    return donations
+}
+
 export { 
-    createDonate
+    createDonate,
+    searchPagedDonations
 }
