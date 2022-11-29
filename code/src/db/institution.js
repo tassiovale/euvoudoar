@@ -3,22 +3,37 @@ import { getDatabaseClientInstance } from './clientInstance.js'
 const databaseClientInstance = getDatabaseClientInstance()
 
 const createInstitution = async (institution) => {
-    return await databaseClientInstance.institution.create(
+    return databaseClientInstance.institution.create(
         {
             data: institution
         }
     )
 }
 
-const findInsitutionByCNPJ = async(cnpj) => {
+const findInstitutionByCNPJ = async (cnpj) => {
 
     return databaseClientInstance.institution.findUnique({
         where: {
-          cnpj
+            cnpj
         }
-      })
+    })
 }
-export { 
+
+const findInstitutionById = async (id) => {
+    return databaseClientInstance.institution.findUnique({
+        where: { id }
+    })
+}
+
+const deleteInstitutionById = async (id) => {
+    return databaseClientInstance.institution.delete({
+        where: { id }
+    })
+}
+
+export {
     createInstitution,
-    findInsitutionByCNPJ
+    findInstitutionByCNPJ,
+    findInstitutionById,
+    deleteInstitutionById
 }
