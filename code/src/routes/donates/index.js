@@ -1,9 +1,11 @@
 import { createRouter } from './create.js'
 import { searchPagedRouter } from './searchPaged.js'
+import { findDonateByIdRouter } from './findByid.js'
 
 const routes = [
     createRouter,
-    searchPagedRouter
+    searchPagedRouter,
+    findDonateByIdRouter,
 ]
 
 export default routes

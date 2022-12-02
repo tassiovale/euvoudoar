@@ -65,7 +65,14 @@ const searchPagedDonations = async (where) => {
     return donations
 }
 
+const findDonateById = async (id) => {
+    return databaseClientInstance.donate.findUnique({
+        where: { id }
+    })
+}
+
 export { 
     createDonate,
-    searchPagedDonations
+    searchPagedDonations,
+    findDonateById,
 }
