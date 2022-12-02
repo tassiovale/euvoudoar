@@ -58,7 +58,7 @@ const searchUsers = async (where) => {
 }
 
 const searchUserByEmail = async (email) => {
-    const user = await databaseClientInstance.user.findUinique(
+    const user = await databaseClientInstance.user.findUnique(
         {
             where: {
                 email
