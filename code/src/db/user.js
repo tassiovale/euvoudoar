@@ -57,9 +57,20 @@ const searchUsers = async (where) => {
     return users
 }
 
+const searchUserByEmail = async (email) => {
+    const user = await databaseClientInstance.user.findUinique(
+        {
+            where: {
+                email
+            }
+        }
+    )
+    return user
+    }
 export { 
     createUser,
     searchUsers,
+    searchUserByEmail,
     deleteUser,
     findUserById,
     updateUser

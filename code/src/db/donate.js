@@ -65,14 +65,28 @@ const searchPagedDonations = async (where) => {
     return donations
 }
 
+<<<<<<< HEAD
 const findDonateById = async (id) => {
     return databaseClientInstance.donate.findUnique({
         where: { id }
     })
+=======
+const deleteDonate = async(id) => {
+    const deletedDonate = await databaseClientInstance.donate.delete({
+        where: {
+            id: id
+        }
+    })
+    return deletedDonate
+>>>>>>> 709938da75e37aad1e92f125bbf48f71e6de6810
 }
 
 export { 
     createDonate,
     searchPagedDonations,
+<<<<<<< HEAD
     findDonateById,
+=======
+    deleteDonate
+>>>>>>> 709938da75e37aad1e92f125bbf48f71e6de6810
 }
