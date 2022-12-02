@@ -5,9 +5,9 @@ import { deleteDonate } from '../../db/donate.js'
 
 const router = express.Router()
 
-
- router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     const { id } = req.params
+    console.log(id)
     if (!id) {
         res.status(HTTP_STATUS_BAD_REQUEST).send('id is required')
         return
