@@ -1,11 +1,13 @@
 import request from 'supertest'
 
 import { app } from '../../../../app.js'
+import { deleteInstitutionById } from '../../../db/institution.js'
+import { deleteUser } from '../../../db/user.js'
 
 let userAuth = {}
-let intitutionId
+let institutionId
 
-beforeEach(async() => {
+beforeEach(async () => {
     //Create or Login
     const resCreateUser = await request(app).post('/users').send({
         name: "Tester User Admin",
@@ -16,13 +18,12 @@ beforeEach(async() => {
 })
 
 afterEach(async () => {
-    // TODO: await request(app).delete(`/institutions/${userAuth.id}`).send()
-    //await request(app).delete(`/users/${userAuth.id}`).send()
-    console.log("delete the tester user")
+    await deleteInstitutionById(institutionId)
+    await deleteUser(userAuth.id)
 });
 
 describe("POST /institutions", () => {
-    
+
 
     test("Extected status: 200. Return the institution created.", async () => {
 
@@ -40,11 +41,15 @@ describe("POST /institutions", () => {
             ]
         }
 
-        const respCreateInstitution = await request(app).post('/institutions')
-                                                        .set('x-access-token', userAuth.token)
-                                                        .send(exampleInstitution)
+        let respCreateInstitution
+        await request(app).post('/institutions')
+            .set('x-access-token', userAuth.token)
+            .send(exampleInstitution)
+            .then(res => {
+                respCreateInstitution = res.body
+            })
         expect(respCreateInstitution.id != null).toEqual(true)
-        intitutionId = respCreateInstitution.id
+        institutionId = respCreateInstitution.id
     })
 
 })
