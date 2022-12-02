@@ -65,7 +65,17 @@ const searchPagedDonations = async (where) => {
     return donations
 }
 
+const deleteDonate = async(id) => {
+    const deletedDonate = await databaseClientInstance.donate.delete({
+        where: {
+            id: id
+        }
+    })
+    return deletedDonate
+}
+
 export { 
     createDonate,
-    searchPagedDonations
+    searchPagedDonations,
+    deleteDonate
 }
