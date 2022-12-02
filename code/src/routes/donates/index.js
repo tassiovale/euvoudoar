@@ -1,7 +1,9 @@
 import { createRouter } from './create.js'
+import { searchPagedRouter } from './searchPaged.js'
 
 const routes = [
-    createRouter
+    createRouter,
+    searchPagedRouter
 ]
 
 export default routes
