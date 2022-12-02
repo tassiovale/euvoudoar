@@ -1,6 +1,5 @@
 import _ from 'lodash'
-import HTTP_STATUS_BAD_REQUEST from '../../constants/httpStatusCodes.js'
-import HTTP_STATUS_NOT_FOUND from '../../constants/httpStatusCodes.js'
+import {HTTP_STATUS_NOT_FOUND, HTTP_STATUS_BAD_REQUEST} from '../../constants/httpStatusCodes.js'
 import express from 'express'
 import { deleteDonate } from '../../db/donate.js'
 
