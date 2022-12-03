@@ -14,7 +14,7 @@ const createDonationProfile = async (donationProfile) => {
 const deleteDonationProfile = async (id) => {
     return databaseClientInstance.donationProfile.delete({
         where: {
-          id,
+            id,
         }
     })
 }
@@ -43,10 +43,18 @@ const findDonationProfileById = async (donationProfilesId) => {
     )
 }
 
-const findDonationProfilePages = async (where) => {
+const findDonationProfilePages = async (page, limit, keyword = '') => {
+    const where = { page: page, limit: limit, keyword }
+
     return await databaseClientInstance.donationProfile.findMany({
         skip: getSkipValueFromQuery(where),
-        take: getTakeValueFromQuery(where)
+
+        take: getTakeValueFromQuery(where),
+
+        where: {
+            name: keyword
+        },
+
     })
 }
 

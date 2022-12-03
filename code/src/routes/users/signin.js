@@ -16,8 +16,8 @@ router.post(
             .withMessage('E-mail inválido')
     ],
     validateRequest,
-    async (req, res) => {    
-        const { email } = req.body  
+    async (req, res) => {
+        const { email } = req.body
         const user = await searchUserByEmail(email)
         if (!user) {
             res.status(HTTP_STATUS_NOT_FOUND).send('Usuário não encontrado')

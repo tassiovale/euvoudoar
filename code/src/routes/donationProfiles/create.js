@@ -36,8 +36,8 @@ router.post(
 
     const user = await findUserById(req.userId);
 
-
-    if (user.role == null || user.role != ADMIN || institution.creatorId != user.id)
+    // || institution.creatorId != user.id
+    if (user.role == null || user.role != ADMIN)
       return res.status(HTTP_STATUS_UNAUTHORIZED).json({
         error: "Você não tem permissões necessárias para fazer esta operação.",
       });

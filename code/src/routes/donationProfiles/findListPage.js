@@ -13,7 +13,7 @@ const router = express.Router()
 router.get('/institutions/:institutionId/donation_profiles',
     async (req, res) => {
 
-        const { page, limit } = req.query
+        const { page, limit, keyword } = req.query
 
         const institutionId = req.params.institutionId
 
@@ -26,14 +26,15 @@ router.get('/institutions/:institutionId/donation_profiles',
         }
 
         const user = await findUserById(req.userId)
-
-        if (user.role == null || user.role != ADMIN || institution.creatorId != user.id) {
+        // || institution.creatorId != user.id
+        if (user.role == null || user.role != ADMIN) {
             return res.status(HTTP_STATUS_UNAUTHORIZED).json({
                 error: "Você não tem permissões necessárias para fazer esta operação.",
             })
         }
 
-        const donationProfile = await findDonationProfilePages(page, limit)
+
+        const donationProfile = await findDonationProfilePages(page, limit, keyword)
 
         res.send(donationProfile)
     })
