@@ -30,13 +30,8 @@ router.post(
             createdBy: req.body.donorId,
             updatedBy: req.body.donorId
         }
-
-        console.log(donation)
-
         const donationCreated = await createDonate(donation)
-
         res.status(HTTP_STATUS_CREATED).send(donationCreated)
-
     }
 )
 

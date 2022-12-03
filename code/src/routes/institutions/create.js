@@ -1,10 +1,11 @@
 import express from 'express'
 import { body } from 'express-validator'
 import { HTTP_STATUS_CONFLIT, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_CREATED } from '../../constants/httpStatusCodes.js'
-import { findUserById } from '../../db/user.js'
+import { getLoggedUser } from '../../helpers/authentication.js'
 import { createInstitution, findInstitutionByCNPJ } from '../../db/institution.js'
 import { validateRequest } from '../../middlewares/validateRequest.js'
 import { ADMIN } from '../../constants/roles.js'
+import { protectedRoute } from '../../middlewares/auth.js'
 
 const router = express.Router()
 
@@ -21,14 +22,15 @@ router.post(
             .notEmpty()
             .withMessage('Adicione o link de pelo menos uma imagem da instituição.')
     ],
+    protectedRoute,
     validateRequest,
     async (req, res) => {
-        const user = await findUserById(req.userId)
+        const user = getLoggedUser(req)
 
-        if (user.role == null || user.role != ADMIN) {
+        if (!user.role || user.role != ADMIN) {
             var resp = { ...req.body }
             resp.error = "Você não tem permissões necessárias para fazer esta operação."
-            res.status(HTTP_STATUS_UNAUTHORIZED).send(resp)
+            res.status(HTTP_STATUS_UNAUTHORIZED).send()
         } else {
 
             const institutionAlready = await findInstitutionByCNPJ(req.body.cnpj)

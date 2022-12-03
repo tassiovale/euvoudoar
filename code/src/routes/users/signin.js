@@ -1,5 +1,6 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 import { body } from 'express-validator'
 
 import { HTTP_STATUS_NOT_FOUND } from '../../constants/httpStatusCodes.js'
@@ -13,20 +14,38 @@ router.post(
     [
         body('email')
             .isEmail()
-            .withMessage('E-mail inválido')
+            .withMessage('E-mail inválido'),
+        body('password')
+            .isStrongPassword({
+                minLength: 8,
+                minNumbers: 1,
+                minSymbols: 1
+            })
+            .withMessage('Senha deve conter no mínimo 8 caracteres, com letras, números e símbolos'),
     ],
     validateRequest,
     async (req, res) => {
-        const { email } = req.body
+        const { email, password } = req.body
         const user = await searchUserByEmail(email)
         if (!user) {
-            res.status(HTTP_STATUS_NOT_FOUND).send('Usuário não encontrado')
+            res.status(HTTP_STATUS_NOT_FOUND).send('Usuário ou senha inválidos')
             return
         }
-        const token = jwt.sign({ id: user.id }, process.env.SECRETKEY, {
-            expiresIn: 86400 // expira em 24h
+        bcrypt.compare(password, user.password, (err, passwordConfirmed) => {
+            if (passwordConfirmed) {
+                delete user.password
+                user.token = jwt.sign(
+                    { 
+                        id: user.id,
+                        role: user.role
+                    }, 
+                    process.env.SECRETKEY
+                )
+                res.send(user)
+            } else {
+                res.status(HTTP_STATUS_NOT_FOUND).send('Usuário ou senha inválidos')
+            }
         })
-        res.send({ auth: true, token: token })
     }
 )
 
