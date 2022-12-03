@@ -71,14 +71,15 @@ const findDonateById = async (id) => {
     })
 }
 
-const deleteDonate = async(id) => {
+const deleteDonate = async(id, userId) => {
     let newDate = new Date().toISOString()
     const deletedDonate = await databaseClientInstance.donate.update({
         where: {
             id: id
         },
         data: {
-            deletedAt: newDate
+            deletedAt: newDate,
+            deletedBy: userId
         }
     })
     return deletedDonate
