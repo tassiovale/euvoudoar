@@ -26,7 +26,7 @@ const findUserById = async (id) => {
       })
 }
 const updateUser = async(user) => {
-    return await prisma.user.update({
+    return await databaseClientInstance.user.update({
         where: {
           id: user.id,
         },
@@ -57,20 +57,14 @@ const searchUsers = async (where) => {
     return users
 }
 
-const searchUserByEmail = async (email) => {
-    const user = await databaseClientInstance.user.findUnique(
-        {
-            where: {
-                email
-            }
-        }
-    )
-    return user
-    }
+const findUserWhere = async (where) => {
+    return await databaseClientInstance.user.findMany({where})
+}
+
 export { 
     createUser,
     searchUsers,
-    searchUserByEmail,
+    findUserWhere,
     deleteUser,
     findUserById,
     updateUser

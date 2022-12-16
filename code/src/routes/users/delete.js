@@ -1,21 +1,10 @@
-import _ from 'lodash'
 import express from 'express'
-import {deleteUser, findUserById} from '../../db/user.js'
+
+import {deleteUserById} from "../../controller/users/delete.js"
+import {protectedRoute} from "../../middlewares/auth.js"
 
 const router = express.Router()
 
-router.delete('/users/:id', async (req, res) => {
-    const { id } = req.params
-
-    const user = await findUserById(id)
-
-    if (typeof user == undefined || user == null){
-        res.send([])
-    }else{
-        await deleteUser(id)
-        res.send([req.params])
-    }
-    
-})
+router.delete('/users/:id', protectedRoute, deleteUserById)
 
 export { router as deleteRouter }

@@ -1,12 +1,10 @@
 import _ from 'lodash'
 import express from 'express'
-import { searchUsers } from '../../db/user.js'
+
+import {searchUser} from "../../controller/users/search.js"
 
 const router = express.Router()
 
-router.get('/users', async (req, res) => {
-    const users = await searchUsers(req.query)
-    res.send(users)
-})
+router.get('/users', searchUser)
 
 export { router as searchRouter }

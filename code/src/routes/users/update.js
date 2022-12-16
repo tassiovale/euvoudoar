@@ -1,22 +1,8 @@
-import _ from 'lodash'
 import express from 'express'
-import { getUsers, setUsers } from '../../helpers/fakeDatabase.js'
-import { HTTP_STATUS_NOT_FOUND } from '../../constants/httpStatusCodes.js'
-
+import {protectedRoute} from "../../middlewares/auth.js"
+import {updateUserById} from "../../controller/users/update.js"
 const router = express.Router()
 
-router.put('/users/:id', (req, res) => {
-    const users = getUsers()
-    const { id } = req.params
-    const index = _.findIndex(users, { id })
-    if (index > -1) {
-        const { name, email } = req.body
-        users[index] = { id, name, email }
-        setUsers(users)
-        res.send(users[index])
-    } else {
-        res.status(HTTP_STATUS_NOT_FOUND).send()
-    }
-})
+router.put('/users/:id', protectedRoute, updateUserById )
 
 export { router as updateRouter }

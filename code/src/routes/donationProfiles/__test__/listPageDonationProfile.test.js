@@ -5,37 +5,35 @@ import { app } from '../../../../app.js'
 import { getDatabaseClientInstance } from '../../../db/clientInstance.js'
 import { createInstitution } from '../../../db/institution'
 import { createDonationProfile, updateDonationProfile } from "../../../db/donationProfile.js";
+import {getTesterUser} from "../../../__test__/setup.tester.js"
+
 let userAuth = null
 let userAuth_2 = null
 let intitutionId = null
 
 beforeEach(async () => {
-    const resCreateUser = await request(app).post('/users').send({
+    userAuth = await getTesterUser({
         name: "Tester User Admin",
-        email: randomWord(10) + "@mail.com",
+        email: "testerAdmin1@mail.com",
         role: "ADMIN",
         password: "senha"
     })
-    const resCreateUser_2 = await request(app).post('/users').send({
+    userAuth_2 = await getTesterUser({
         name: "Tester User Admin 2",
-        email: randomWord(10) + "@mail.com",
+        email: "testerAdmin2@mail.com",
         role: "ADMIN",
         password: "senha"
     })
-    userAuth = resCreateUser.body
-    userAuth_2 = resCreateUser_2.body
 })
 
 afterEach(async () => {
     const databaseClientInstance = getDatabaseClientInstance()
-
 
     await databaseClientInstance.institution.delete({
         where: {
             id: intitutionId
         }
     })
-
 
     await databaseClientInstance.user.delete({
         where: {
@@ -48,8 +46,6 @@ afterEach(async () => {
         }
     })
 });
-
-
 
 describe("Donation Profiles", () => {
 
