@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
     const deleter = institution.deleterId != null ? await findUserById(institution.deleterId) : null
     return res.status(HTTP_STATUS_OK).json({
         id,
-        id: institution.id,
+        name: institution.name,
         cnpj: institution.cnpj,
         paymentGateway: {
             type: paymentGateway.type,

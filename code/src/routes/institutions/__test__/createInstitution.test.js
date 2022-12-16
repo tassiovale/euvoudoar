@@ -1,8 +1,8 @@
 import request from 'supertest'
 import { app } from '../../../../app.js'
-
-import { deleteInstitutionById, findInstitutionByCNPJ} from '../../../db/institution.js'
-import {getTesterUser} from "../../../__test__/setup.tester.js"
+import jwt from 'jsonwebtoken'
+import { createUser, deleteUser } from '../../../db/user.js'
+import { deleteInstitutionById } from '../../../db/institution.js'
 
 
 const TEST_INFO = {
@@ -20,29 +20,30 @@ const TEST_INFO = {
         ]
     },
     testerAdminUser: {
-        name:"Tester User Admin",
-        email:"tester_user_admin4@mail.com",
+        name: "Tester User Admin",
+        email: "tester_user_admin4@mail.com",
         password: "p12&35wdA.dNa-@to!",
-        passwordConfirmation: "p12&35wdA.dNa-@to!",
+        role: "ADMIN"
     }
 }
 
-beforeAll(async () => {
-
-    const institution = await findInstitutionByCNPJ(TEST_INFO.institution.cnpj)
-    if (institution != null){
-        if (institution.id != null){
-            deleteInstitutionById(institution.id)
-        }
-    }
-    TEST_INFO.testerAdminUser = await getTesterUser(TEST_INFO.testerAdminUser)
-})
-
-afterAll(async () => {
-    await deleteInstitutionById(TEST_INFO.institution.id)
-});
-
 describe("POST /institutions", () => {
+    beforeAll(async () => {
+        TEST_INFO.testerAdminUser = await createUser(TEST_INFO.testerAdminUser)
+        TEST_INFO.testerAdminUser.token = jwt.sign(
+            {
+                id: TEST_INFO.testerAdminUser.id,
+                role: TEST_INFO.testerAdminUser.role
+            },
+            process.env.SECRETKEY
+        )
+    })
+
+    afterAll(async () => {
+        await deleteInstitutionById(TEST_INFO.institution.id)
+        await deleteUser(TEST_INFO.testerAdminUser.id)
+    });
+
     test("Expect status: 200. Return the institution created.", async () => {
         await request(app).post('/institutions')
             .set('x-access-token', TEST_INFO.testerAdminUser.token)

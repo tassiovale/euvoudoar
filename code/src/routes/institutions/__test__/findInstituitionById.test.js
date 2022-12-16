@@ -1,9 +1,9 @@
 import request from 'supertest'
 import { app } from '../../../../app.js'
 import { HTTP_STATUS_UNAUTHORIZED } from '../../../constants/httpStatusCodes.js'
-
-import {getTesterUser} from "../../../__test__/setup.tester.js"
-import { findInstitutionByCNPJ} from '../../../db/institution.js'
+import { createUser, deleteUser } from '../../../db/user.js'
+import { deleteInstitutionById } from '../../../db/institution.js'
+import jwt from 'jsonwebtoken'
 
 const TEST_INFO = {
     institution: {
@@ -20,33 +20,37 @@ const TEST_INFO = {
         ]
     },
     testerAdminUser: {
-        name:"Tester User Admin",
-        email:"tester_user_admin4@mail.com",
+        name: "Tester User Admin",
+        email: "tester_user_admin4@mail.com",
         password: "p12&35wdA.dNa-@to!",
-        passwordConfirmation: "p12&35wdA.dNa-@to!",
+        role: "ADMIN"
     }
 }
 
-beforeAll(async () => {
-    
-    TEST_INFO.testerAdminUser = await getTesterUser(TEST_INFO.testerAdminUser)
-
-    const institution = await findInstitutionByCNPJ(TEST_INFO.institution.cnpj)
-    
-    if (institution != null){
-        TEST_INFO.institution.id = institution.id
-    }else{
-        await request(app).post('/institutions')
-        .set('x-access-token', TEST_INFO.testerAdminUser.token)
-        .send(TEST_INFO.institution)
-        .then((res) => {
-            TEST_INFO.institution.id = res.body.id
-        })
-    }
-    
-})
-
 describe('GET /institutions/{id}', () => {
+    beforeAll(async () => {
+        TEST_INFO.testerAdminUser = await createUser(TEST_INFO.testerAdminUser)
+        TEST_INFO.testerAdminUser.token = jwt.sign(
+            {
+                id: TEST_INFO.testerAdminUser.id,
+                role: TEST_INFO.testerAdminUser.role
+            },
+            process.env.SECRETKEY
+        )
+        await request(app).post('/institutions')
+            .set('x-access-token', TEST_INFO.testerAdminUser.token)
+            .send(TEST_INFO.institution)
+            .then(res => {
+                TEST_INFO.institution.id = res.body.id
+            }
+            )
+    })
+
+    afterAll(async () => {
+        await deleteInstitutionById(TEST_INFO.institution.id)
+        await deleteUser(TEST_INFO.testerAdminUser.id)
+    })
+
     test('Should return 200 when institution is found', async () => {
         await request(app).get(`/institutions/${TEST_INFO.institution.id}`)
             .set('x-access-token', TEST_INFO.testerAdminUser.token)
