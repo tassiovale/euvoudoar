@@ -1,10 +1,11 @@
-import { findUserById } from '../../db/user.js';
+import { ADMIN } from '../../constants/roles.js'
 import { findInstitutionById, updateInstitutionById } from '../../db/institution.js';
-import { deleteImageById } from '../../db/image.js';
-import { HTTP_STATUS_OK } from '../../constants/httpStatusCodes.js';
+import { deleteImageById, findImageByInstitutionId } from '../../db/image.js';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_NOT_FOUND } from '../../constants/httpStatusCodes.js';
+import { getLoggedUser } from '../../helpers/authentication.js'
 
 const updateInstitutionController = async (req, res) => {
-        const user = await findUserById(req.userId);
+        const user = getLoggedUser(req)
 
         if (user.role == null || user.role != ADMIN) {
             var response = { 
@@ -24,16 +25,28 @@ const updateInstitutionController = async (req, res) => {
                 error: 'Você não pode fazer esta operação.'
             }
             
-            return res.status(HTTP_STATUS_UNAUTHORIZED).send(response);
+            return res.status(HTTP_STATUS_NOT_FOUND).send(response);
         }
 
-        if (!institution.images) {
-            institution.images.array.forEach(image => {
+        const imagesForDelete = await findImageByInstitutionId(institutionId);
+
+        if (imagesForDelete) {
+            imagesForDelete.forEach(image => {
                 deleteImageById(image.id);
             });
         }
 
-        const { name, cnpj, paymentGateway, description, images } = req.body;
+        const { name, cnpj, description } = req.body;
+
+        const images = [];
+
+        if (req.body.images) {
+            req.body.images.forEach((image) => {
+                images.push({
+                    url: image
+                })
+            })
+        }
 
         const updatedInstitution = await updateInstitutionById(
             {
@@ -43,11 +56,8 @@ const updateInstitutionController = async (req, res) => {
                 images: {
                     create: images,
                 },
-                paymentGateway: {
-                    create: paymentGateway,
-                },
                 updatedBy: {
-                    connect: { id: req.userId }
+                    connect: { id: user.id }
                 },
             },
             institutionId,
