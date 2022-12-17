@@ -1,3 +1,4 @@
+import { ADMIN } from "../constants/roles"
 export const TEST_INFO = {
     institution: {
         "name": "XPTO",
@@ -26,7 +27,7 @@ export const TEST_INFO = {
         name: "Tester User Admin",
         email: "tester_user_admin4@mail.com",
         password: "p12&35wdA.dNa-@to!",
-        role: "ADMIN"
+        role: ADMIN
     },
     testerUser: {
         name: "Tester User",

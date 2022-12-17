@@ -4,6 +4,7 @@ import { createDonationProfile, } from "../../../db/donationProfile.js";
 import { app } from '../../../../app.js'
 import { getDatabaseClientInstance } from '../../../db/clientInstance.js'
 import { createInstitution } from '../../../db/institution'
+import { ADMIN } from '../../../constants/roles';
 
 let userAuth = null
 let intitutionId = null
@@ -12,7 +13,7 @@ beforeEach(async () => {
     const resCreateUser = await request(app).post('/users').send({
         name: "Tester User Admin",
         email: randomWord(10) + "@mail.com",
-        role: "ADMIN",
+        role: ADMIN,
         password: "senha"
     })
     userAuth = resCreateUser.body

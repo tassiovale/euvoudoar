@@ -1,6 +1,6 @@
 import request from 'supertest'
 import {cnpj, gera_random, randomWord} from '../../../helpers/utils'
-
+import { ADMIN } from '../../../constants/roles'
 import { app } from '../../../../app.js'
 import { getDatabaseClientInstance } from '../../../db/clientInstance.js'
 import { createInstitution } from '../../../db/institution'
@@ -12,7 +12,7 @@ beforeEach(async() => {
     const resCreateUser = await request(app).post('/users').send({
         name: "Tester User Admin",
         email: randomWord(10)+"@mail.com",
-        role: "ADMIN",
+        role: ADMIN,
         password: "senha"
     })
     userAuth = resCreateUser.body
