@@ -5,7 +5,7 @@ import { createInstitution } from "../../../db/institution";
 import { deleteInstitutionById } from "../../../db/institution.js";
 import { TEST_INFO, generateEmail } from "../../../__test__/testInfo.js";
 import { makeToken } from "../../../helpers/makeToken.js";
-import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } from "../../../constants/httpStatusCodes.js";
+import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from "../../../constants/httpStatusCodes.js";
 
 describe("PUT /institutions/{id}", () => {
   beforeAll(async () => {
