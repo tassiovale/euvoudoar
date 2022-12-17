@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CONFLIT, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_CREATED } from '../../constants/httpStatusCodes.js'
+import { HTTP_STATUS_CONFLIT, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_CREATED, HTTP_STATUS_SERVER_ERROR } from '../../constants/httpStatusCodes.js'
 import { getLoggedUser } from '../../helpers/authentication.js'
 import { createInstitution, findInstitutionByCNPJ } from '../../db/institution.js'
 import { ADMIN } from '../../constants/roles.js'
@@ -46,9 +46,11 @@ const createInstitutionController = async (req, res) => {
                 }
             }
 
-            const institutionCreated = await createInstitution(institution)
-
-            res.status(HTTP_STATUS_CREATED).send(institutionCreated)
+            createInstitution(institution).then( async (result) => {
+                res.status(HTTP_STATUS_CREATED).send(result)
+            }).catch( async (error) => {
+                res.status(HTTP_STATUS_SERVER_ERROR).send(error)
+            })            
 
         }
 
