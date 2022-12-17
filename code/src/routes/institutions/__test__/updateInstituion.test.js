@@ -73,6 +73,8 @@ describe("PUT /institutions/{id}", () => {
             .then((res) => {
                 expect(res.status).toBe(401)
             })
+
+        await deleteUser(user.id)
     })
 
     test("Expect status: 200. Return the institution updated.", async () => {
