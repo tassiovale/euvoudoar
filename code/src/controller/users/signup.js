@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 
 import { HTTP_STATUS_CREATED, HTTP_STATUS_CONFLIT } from '../../constants/httpStatusCodes.js'
 import { createUser, searchUsers } from '../../db/user.js'
+import { makeToken } from '../../helpers/makeToken.js'
 
 const signup = async (req, res) => {
     const { name, email, password } = req.body
@@ -23,13 +23,7 @@ const signup = async (req, res) => {
                             password: hash
                         })
                         delete createdUser.password
-                        createdUser.token = jwt.sign(
-                            { 
-                                id: createdUser.id,
-                                role: createdUser.role
-                            },
-                            process.env.SECRETKEY
-                        )
+                        createdUser.token = makeToken(createdUser)
                         res.status(HTTP_STATUS_CREATED).send(createdUser)
                     }
                 })

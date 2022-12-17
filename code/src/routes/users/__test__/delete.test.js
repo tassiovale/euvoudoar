@@ -1,55 +1,48 @@
 import request from 'supertest'
 import { app } from '../../../../app.js'
+import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } from '../../../constants/httpStatusCodes.js';
+import { randomWord } from '../../../helpers/utils'
+import { TEST_INFO } from '../../../__test__/testInfo.js'
+import { createUser, deleteUser } from '../../../db/user.js'
+import { makeToken } from '../../../helpers/makeToken.js';
 
-import request from 'supertest'
-import { app } from '../../../../app.js'
-import { createUser, searchUserByEmail } from '../../../db/user.js'
+let user;
+describe("DELETE /user", () => {
 
-const TEST_INFO = {}
-
-beforeAll(async () => {
-
-    const userAdminExists = await searchUserByEmail("tester_user_admin@mail.com")
-
-    if (userExists != null){
-        TEST_INFO.testerAdminUser = userAdminExists
-    }else{
-        TEST_INFO.testerAdminUser = await createUser({
-            name:"Tester User Admin",
-            email:"tester_user_admin@mail.com",
-            role: "ADMIN",
-            password: "p12&35wdA.dNa-@to!"
-        })
-    }
-
-    const loginAdminUserRes = await request(app).post('/signin').send({
-        email: TEST_INFO.testerUser.email,
-        password: TEST_INFO.testerUser.password
+    beforeAll(async () => {
+        TEST_INFO.testerAdminUser = await createUser(TEST_INFO.testerAdminUser)
+        TEST_INFO.testerAdminUser.token = makeToken(TEST_INFO.testerAdminUser)
+        const response = await request(app)
+            .post('/users')
+            .send({
+                name: 'Tassio Valle',
+                email: randomWord(10) + '@ufrb.edu.br',
+                password: '123456A@b',
+                passwordConfirmation: '123456A@b'
+            })
+        user = response.body
     })
 
-    TEST_INFO.loginAdminToken = loginAdminUserRes.body.token
-    console.log(TEST_INFO)
-})
+    afterAll(async () => {
+        await deleteUser(TEST_INFO.testerAdminUser.id)
+    })
 
-
-describe("DELETE /user", () => {
-    
-    test('returns filled array on successful deletion', async () => {
-
+    test('returns 200 if success', async () => {
         const deleteResponse = await request(app)
-            .delete(`/users/${TEST_INFO.testerAdminUser.id}`)
+            .delete(`/users/${user.id}`)
+            .set('x-access-token', TEST_INFO.testerAdminUser.token)
             .send()
-
-        console.log("delete reponse:")
-        console.log(deleteResponse.body)
-        expect(deleteResponse.body.length).toBeGreaterThan(0)
+        expect(deleteResponse.status).toBe(HTTP_STATUS_OK)
+        expect(deleteResponse.body.id).not.toBeNull()
     })
 
     test('returns empty array on non-existent user', async () => {
         const deleteRoute = '/users/7845645876'
         const response = await request(app)
             .delete(deleteRoute)
+            .set('x-access-token', TEST_INFO.testerAdminUser.token)
             .send()
+        expect(response.status).toBe(HTTP_STATUS_NOT_FOUND)
         expect(response.body).toEqual([])
     })
 
