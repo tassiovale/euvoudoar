@@ -1,18 +1,15 @@
-import express from "express";
 import {
-  HTTP_STATUS_NOT_FOUND,
+  HTTP_STATUS_NO_CONTENT,
   HTTP_STATUS_OK,
 } from "../../constants/httpStatusCodes.js";
 import { searchInstitutionByKeyword } from "../../db/institution.js";
 
-const router = express.Router();
 
-router.get("/", async (req, res) => {
+const searchInstitutionController = async (req, res) => {
   const institutions = await searchInstitutionByKeyword(req.query);
-
-  if (!institutions) {
+  if (institutions.length === 0) {
     return res
-      .status(HTTP_STATUS_NOT_FOUND)
+      .status(HTTP_STATUS_NO_CONTENT)
       .json({ message: "Institution not found" });
   }
 
@@ -21,6 +18,6 @@ router.get("/", async (req, res) => {
   }
 
   return res.status(HTTP_STATUS_OK).json(institutions);
-});
+}
 
-export { router as searchInstitutionController };
+export { searchInstitutionController };

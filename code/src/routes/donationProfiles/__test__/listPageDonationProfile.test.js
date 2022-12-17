@@ -6,6 +6,7 @@ import { getDatabaseClientInstance } from '../../../db/clientInstance.js'
 import { createInstitution } from '../../../db/institution'
 import { createDonationProfile, updateDonationProfile } from "../../../db/donationProfile.js";
 import {getTesterUser} from "../../../__test__/setup.tester.js"
+import { ADMIN } from '../../../constants/roles'
 
 let userAuth = null
 let userAuth_2 = null
@@ -15,13 +16,13 @@ beforeEach(async () => {
     userAuth = await getTesterUser({
         name: "Tester User Admin",
         email: "testerAdmin1@mail.com",
-        role: "ADMIN",
+        role: ADMIN,
         password: "senha"
     })
     userAuth_2 = await getTesterUser({
         name: "Tester User Admin 2",
         email: "testerAdmin2@mail.com",
-        role: "ADMIN",
+        role: ADMIN,
         password: "senha"
     })
 })

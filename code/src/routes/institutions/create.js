@@ -17,7 +17,10 @@ router.post(
             .withMessage('Forneça o cnpj'),
         body('images')
             .notEmpty()
-            .withMessage('Adicione o link de pelo menos uma imagem da instituição.')
+            .withMessage('Adicione o link de pelo menos uma imagem da instituição.'),
+        body('description')
+            .notEmpty()
+            .withMessage('Adicione uma descrição para a instituição')
     ],
     protectedRoute,
     validateRequest,
