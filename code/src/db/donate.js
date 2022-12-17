@@ -85,9 +85,16 @@ const deleteDonate = async(id, userId) => {
     return deletedDonate
 }
 
+const deleteDonateById = async (id) => {
+    return databaseClientInstance.donate.delete({
+      where: { id },
+    });
+};
+
 export { 
     createDonate,
     searchPagedDonations,
     findDonateById,
-    deleteDonate
+    deleteDonate,
+    deleteDonateById
 }

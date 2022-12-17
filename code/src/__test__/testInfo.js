@@ -32,6 +32,12 @@ export const TEST_INFO = {
         name: "Tester User",
         email: "tester_user4@mail.com",
         password: "p12&35wdA.dNa-@t!",
+    },
+    donate: {
+        "recurrence": "weekly", // "weekly" | "monthly" | "yearly" | null,
+        "recurrenceExpirationDate": "2022-11-20 14:32:00", // "2022-11-20 14:32:00" | null,
+        "value": 30.0,
+        "status": "pending", // "pending" | "canceled" | "paid",
     }
 }
 
