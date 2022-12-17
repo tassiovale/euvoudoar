@@ -34,3 +34,8 @@ export const TEST_INFO = {
         password: "p12&35wdA.dNa-@t!",
     }
 }
+
+export const generateEmail = () => {
+    const randomNumber = Math.floor(Math.random() * 100000)
+    return `tester_user_${randomNumber}@mail.com`
+}
