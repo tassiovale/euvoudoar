@@ -1,3 +1,4 @@
+import { DONOR } from '../constants/roles.js'
 import { getSkipValueFromQuery, getTakeValueFromQuery } from '../helpers/paginationData.js'
 import { getDatabaseClientInstance } from './clientInstance.js'
 
@@ -6,7 +7,10 @@ const databaseClientInstance = getDatabaseClientInstance()
 const createUser = async (user) => {
     const createdUser = await databaseClientInstance.user.create(
         {
-            data: user
+            data: {
+                ...user,
+                role: DONOR
+            }
         }
     )
     return createdUser
