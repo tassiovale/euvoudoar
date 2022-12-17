@@ -1,6 +1,6 @@
 import request from 'supertest'
 import { app } from '../../../../app.js'
-import { HTTP_STATUS_UNAUTHORIZED } from '../../../constants/httpStatusCodes.js'
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../../constants/httpStatusCodes.js'
 import { createUser, deleteUser } from '../../../db/user.js'
 import { deleteInstitutionById } from '../../../db/institution.js'
 import jwt from 'jsonwebtoken'
@@ -63,7 +63,7 @@ describe('GET /institutions/{id}', () => {
     test('Expected unauthorized error.', async () => {
         await request(app).get(`/institutions/${TEST_INFO.institution.id}`)
             .then(res => {
-                expect(res.status).toBe(HTTP_STATUS_UNAUTHORIZED)
+                expect(res.status).toBe(HTTP_STATUS_OK)
             })
     })
 

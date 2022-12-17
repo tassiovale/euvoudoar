@@ -1,14 +1,10 @@
-import express from 'express'
 import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } from '../../constants/httpStatusCodes.js'
 import { findImageByInstitutionId } from '../../db/image.js'
 import { findInstitutionById } from '../../db/institution.js'
 import { findPaymentGatewayByInstitutionId } from '../../db/paymentGateway.js'
 import { findUserById } from '../../db/user.js'
 
-
-const router = express.Router()
-
-router.get('/:id', async (req, res) => {
+const findInstitutionByIdController = async (req, res) => {
     const { id } = req.params
     const institution = await findInstitutionById(id)
     if (!institution) {
@@ -45,6 +41,6 @@ router.get('/:id', async (req, res) => {
             name: deleter.name,
         } : null
     })
-})
+}
 
-export { router as findById }
+export { findInstitutionByIdController }

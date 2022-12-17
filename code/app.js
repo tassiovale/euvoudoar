@@ -16,25 +16,10 @@ app.use(testRoutes)
 
 app.use(userRoutes)
 
-app.use('/donations',donateRoutes)
+app.use('/donations', donateRoutes)
 
-app.use("/institutions", hundleAuth, institutionRoutes)
+app.use("/institutions", institutionRoutes)
 
-app.use("/", hundleAuth, donationProfiles)
-
-function hundleAuth(req, res, next){
-    jwt.verify(
-        req.headers['x-access-token'],
-        process.env.SECRETKEY,
-        function (err,decoded){
-            if (err){
-                res.sendStatus(HTTP_STATUS_UNAUTHORIZED)
-            }else{
-                req.userId = decoded.id
-                next()
-            }
-        }
-    )
-}
+app.use("/", donationProfiles)
 
 export { app }
