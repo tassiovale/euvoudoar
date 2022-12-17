@@ -11,7 +11,7 @@ const deleteInstitutionByIdController = async (req, res) => {
     } else {
         const { id } = req.params
         const institution = await findInstitutionById(id)
-        if (!institution) {
+        if (!institution || institution.deletedAt) {
             return res.status(HTTP_STATUS_NOT_FOUND).json({ message: 'Institution not found' })
         }
         institution.deletedAt = new Date()

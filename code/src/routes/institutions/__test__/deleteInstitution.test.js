@@ -5,12 +5,13 @@ import { deleteInstitutionById } from '../../../db/institution.js'
 import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../../constants/httpStatusCodes.js'
 import { TEST_INFO, generateEmail } from '../../../__test__/testInfo.js'
 import { makeToken } from '../../../helpers/makeToken.js'
-
+import { ADMIN } from '../../../constants/roles.js'
 
 describe('DELETE /institutions/{id}', () => {
     beforeAll(async () => {
         TEST_INFO.testerAdminUser.email = generateEmail()
         TEST_INFO.testerAdminUser = await createUser(TEST_INFO.testerAdminUser)
+        TEST_INFO.testerAdminUser.role = ADMIN
         TEST_INFO.testerAdminUser.token = makeToken(TEST_INFO.testerAdminUser)
 
         TEST_INFO.testerUser.email = generateEmail()
