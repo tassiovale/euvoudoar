@@ -2,7 +2,7 @@ import request from 'supertest'
 import { app } from '../../../../app.js'
 import { createUser, deleteUser } from '../../../db/user.js'
 import { deleteInstitutionById } from '../../../db/institution.js'
-import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../../constants/httpStatusCodes.js'
+import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../../constants/httpStatusCodes.js'
 import { TEST_INFO, generateEmail } from '../../../__test__/testInfo.js'
 import { makeToken } from '../../../helpers/makeToken.js'
 
@@ -53,7 +53,7 @@ describe('DELETE /institutions/{id}', () => {
         await request(app).delete(`/institutions/123456789`)
             .set('x-access-token', TEST_INFO.testerAdminUser.token)
             .then(res => {
-                expect(res.status).toBe(404)
+                expect(res.status).toBe(HTTP_STATUS_NOT_FOUND)
             })
     })
 
