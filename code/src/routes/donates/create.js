@@ -1,6 +1,6 @@
 import express from 'express'
 import { body } from 'express-validator'
-import { HTTP_STATUS_CONFLIT, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_CREATED } from '../../constants/httpStatusCodes.js'
+import { HTTP_STATUS_CREATED } from '../../constants/httpStatusCodes.js'
 import { createDonate } from '../../db/donate.js'
 import { validateRequest } from '../../middlewares/validateRequest.js'
 
@@ -25,7 +25,7 @@ router.post(
             institutionId: req.body.institutionId,
             donorId: req.body.donorId,
             recurrence: req.body.recurrence,
-            recurrenceExpirationDate: req.body.recurrenceExpirationDate,
+            recurrenceExpirationDate: new Date(req.body.recurrenceExpirationDate),
             value: req.body.value,
             createdBy: req.body.donorId,
             updatedBy: req.body.donorId
