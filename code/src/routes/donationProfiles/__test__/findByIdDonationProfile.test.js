@@ -1,122 +1,77 @@
-import request from 'supertest'
-import { randomWord } from '../../../helpers/utils'
-import { createDonationProfile, } from "../../../db/donationProfile.js";
-import { app } from '../../../../app.js'
-import { getDatabaseClientInstance } from '../../../db/clientInstance.js'
-import { createInstitution } from '../../../db/institution'
+import request from "supertest";
+import { randomWord } from "../../../helpers/utils";
+import { createDonationProfile } from "../../../db/donationProfile.js";
+import { app } from "../../../../app.js";
 
-let userAuth = null
-let intitutionId = null
-
-beforeEach(async () => {
-    const resCreateUser = await request(app).post('/users').send({
-        name: "Tester User Admin",
-        email: randomWord(10) + "@mail.com",
-        role: "ADMIN",
-        password: "senha"
-    })
-    userAuth = resCreateUser.body
-
-
-})
-
-afterEach(async () => {
-    const databaseClientInstance = getDatabaseClientInstance()
-
-
-    await databaseClientInstance.institution.delete({
-        where: {
-            id: intitutionId
-        }
-    })
-
-
-    await databaseClientInstance.user.delete({
-        where: {
-            id: userAuth.id,
-        }
-    })
-});
+import { createUser, deleteUser } from "../../../db/user.js";
+import { createInstitution } from "../../../db/institution";
+import { deleteInstitutionById } from "../../../db/institution.js";
+import { TEST_INFO, generateEmail } from "../../../__test__/testInfo.js";
+import { makeToken } from "../../../helpers/makeToken.js";
+import { HTTP_STATUS_OK } from "../../../constants/httpStatusCodes";
 
 describe("Donation Profiles", () => {
+  beforeAll(async () => {
+    TEST_INFO.testerAdminUser.email = generateEmail();
+    TEST_INFO.testerAdminUser = await createUser(TEST_INFO.testerAdminUser);
+    TEST_INFO.testerAdminUser.token = makeToken(TEST_INFO.testerAdminUser);
 
+    const images = [];
 
-    test("Should find donation profile by id.", async () => {
+    TEST_INFO.institution.images.forEach((image) => {
+      images.push({
+        url: image,
+      });
+    });
 
-        const exampleInstitution = {
-            "name": "TESTNAME",
-            "cnpj": randomWord(10),
-            "paymentGateway": {
-                "type": "pagatest",
-                "apiKey": "fkldsy879ey087yfg908stfb089760r976b0v"
-            },
-            "description": "Descrição de test...",
-            images: [{
-                url: "localhost"
-            }]
-        }
+    TEST_INFO.institution = await createInstitution({
+      name: TEST_INFO.institution.name,
+      cnpj: TEST_INFO.institution.cnpj,
+      paymentGateway: {
+        create: TEST_INFO.institution.paymentGateway,
+      },
+      description: TEST_INFO.institution.description,
+      images: {
+        create: images,
+      },
+      createdBy: {
+        connect: { id: TEST_INFO.testerAdminUser.id },
+      },
+      updatedBy: {
+        connect: { id: TEST_INFO.testerAdminUser.id },
+      },
+    });
+  });
 
-        const instituion = await createInstitution({
-            ...exampleInstitution,
-            paymentGateway: {
-                create: exampleInstitution.paymentGateway
-            },
-            images: {
-                create: exampleInstitution.images
-            },
-            createdBy: {
-                connect: { id: userAuth.id }
-            },
-            updatedBy: {
-                connect: { id: userAuth.id }
-            }
-        })
+  afterAll(async () => {
+    await deleteInstitutionById(TEST_INFO.institution.id);
+    await deleteUser(TEST_INFO.testerAdminUser.id);
+  });
 
-        intitutionId = instituion.id
+  test("Should find donation profile by id.", async () => {
+    const donationProfile = await createDonationProfile({
+      name: "Contribuição mensal",
+      institution: {
+        connect: { id: TEST_INFO.institution.id },
+      },
+      recurrence: "WEEKLY",
+      recurrenceExpirationDate: new Date("2022-11-28 14:32:00"),
+      createdBy: {
+        connect: { id: TEST_INFO.testerAdminUser.id },
+      },
+      updatedBy: {
+        connect: { id: TEST_INFO.testerAdminUser.id },
+      },
+    });
 
-
-        const exampleDonationProfile = {
-            "name": "Contribuição Diaria",
-            "institutionId": "a5a78e02-a9ed-49c4-b41d-705a0c8c79ff",
-            "recurrence": "WEEKLY",
-            "recurrenceExpirationDate": new Date("2022-11-28 14:32:00")
-        }
-
-        const donationProfile = await createDonationProfile({
-            name: "Contribuição mensal",
-            institution: {
-                connect: { id: intitutionId },
-            },
-            recurrence: "WEEKLY",
-            recurrenceExpirationDate: new Date("2022-11-28 14:32:00"),
-            createdBy: {
-                connect: { id: userAuth.id },
-            },
-            updatedBy: {
-                connect: { id: userAuth.id },
-            },
-        });
-
-        const expectData = {
-            id: donationProfile.id,
-            name: exampleDonationProfile.name,
-            recurrence: exampleDonationProfile.recurrence,
-            recurrenceExpirationDate: "2022-11-28 14:32:00",
-            institutionId: instituion.id,
-            createdAt: donationProfile.createdAt,
-            updatedAt: new Date(),
-            deletedAt: null,
-            creatorId: userAuth.id,
-            updaterId: userAuth.id,
-            deleterId: null
-        }
-
-        const donationProfilesRequest = await request(app).get(`/institutions/${instituion.id}/donation_profiles/${donationProfile.id}`)
-            .set('x-access-token', userAuth.token)
-
-        expect(JSON.parse(donationProfilesRequest.text).name).toEqual(expectData.name)
-        expect(JSON.parse(donationProfilesRequest.text).recurrence).toEqual(expectData.recurrence)
-
-    })
-
-})
+    await request(app)
+      .get(
+        `/institutions/${TEST_INFO.institution.id}/donation_profiles/${donationProfile.id}`
+      )
+      .set("x-access-token", TEST_INFO.testerAdminUser.token)
+      .then((res) => {
+        expect(res.body.id).toEqual(donationProfile.id);
+        expect(res.status).toBe(HTTP_STATUS_OK);
+      });
+  });
+});
