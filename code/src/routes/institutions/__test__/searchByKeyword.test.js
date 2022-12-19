@@ -1,13 +1,13 @@
 import request from 'supertest'
 import { app } from '../../../../app.js'
-import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../../constants/httpStatusCodes.js'
+import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } from '../../../constants/httpStatusCodes.js'
 import { createUser, deleteUser } from '../../../db/user.js'
 import { deleteInstitutionById } from '../../../db/institution.js'
 import { TEST_INFO, generateEmail } from '../../../__test__/testInfo.js'
 import { makeToken } from '../../../helpers/makeToken.js'
 import { ADMIN } from '../../../constants/roles.js'
 
-describe('GET /institutions/{id}', () => {
+describe('GET /institutions/', () => {
     beforeAll(async () => {
         TEST_INFO.testerAdminUser.email = generateEmail()
         TEST_INFO.testerAdminUser = await createUser(TEST_INFO.testerAdminUser)
@@ -28,18 +28,18 @@ describe('GET /institutions/{id}', () => {
     })
 
     test('Should return 200 when institution is found', async () => {
-        await request(app).get(`/institutions/${TEST_INFO.institution.id}`)
+        await request(app).get(`/institutions?keyword=${TEST_INFO.institution.name}`)
             .set('x-access-token', TEST_INFO.testerAdminUser.token)
             .then(res => {
-                expect(res.body.id).toEqual(TEST_INFO.institution.id)
+                expect(res.body[0].id).toEqual(TEST_INFO.institution.id)
                 expect(res.status).toBe(HTTP_STATUS_OK)
             })
     })
-    test('Should return 404 when institution is not found', async () => {
-        await request(app).get(`/institutions/123456789`)
+    test('Should return 204 when not have institutions', async () => {
+        await request(app).get(`/institutions?keyword=XPTU`)
             .set('x-access-token', TEST_INFO.testerAdminUser.token)
             .then(res => {
-                expect(res.status).toBe(HTTP_STATUS_NOT_FOUND)
+                expect(res.status).toBe(HTTP_STATUS_NO_CONTENT)
             })
     })
 })

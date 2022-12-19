@@ -5,11 +5,14 @@ import { createInstitution } from "../../../db/institution";
 import { deleteInstitutionById } from "../../../db/institution.js";
 import { TEST_INFO, generateEmail } from "../../../__test__/testInfo.js";
 import { makeToken } from "../../../helpers/makeToken.js";
+import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from "../../../constants/httpStatusCodes.js";
+import { ADMIN } from "../../../constants/roles.js";
 
 describe("PUT /institutions/{id}", () => {
   beforeAll(async () => {
     TEST_INFO.testerAdminUser.email = generateEmail();
     TEST_INFO.testerAdminUser = await createUser(TEST_INFO.testerAdminUser);
+    TEST_INFO.testerAdminUser.role = ADMIN;
     TEST_INFO.testerAdminUser.token = makeToken(TEST_INFO.testerAdminUser);
 
     TEST_INFO.testerUser = await createUser(TEST_INFO.testerUser);
@@ -54,7 +57,7 @@ describe("PUT /institutions/{id}", () => {
       .set("x-access-token", TEST_INFO.testerAdminUser.token)
       .send(TEST_INFO.institutionUpdated)
       .then((res) => {
-        expect(res.status).toBe(404);
+        expect(res.status).toBe(HTTP_STATUS_NOT_FOUND);
       });
   });
 
@@ -67,7 +70,7 @@ describe("PUT /institutions/{id}", () => {
       )
       .send(TEST_INFO.institutionUpdated)
       .then((res) => {
-        expect(res.status).toBe(401);
+        expect(res.status).toBe(HTTP_STATUS_UNAUTHORIZED);
       });
   });
 
@@ -77,7 +80,7 @@ describe("PUT /institutions/{id}", () => {
       .set("x-access-token", TEST_INFO.testerUser.token)
       .send(TEST_INFO.institutionUpdated)
       .then((res) => {
-        expect(res.status).toBe(401);
+        expect(res.status).toBe(HTTP_STATUS_UNAUTHORIZED);
       });
   });
 
@@ -89,7 +92,7 @@ describe("PUT /institutions/{id}", () => {
       .then((res) => {
         const { id, name, cnpj, description } = res.body;
 
-        expect(res.status).toBe(200);
+        expect(res.status).toBe(HTTP_STATUS_OK);
         expect(id).not.toBeFalsy();
         expect(name).toBe(TEST_INFO.institutionUpdated.name);
         expect(cnpj).toBe(TEST_INFO.institutionUpdated.cnpj);

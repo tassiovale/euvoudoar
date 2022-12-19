@@ -1,0 +1,7 @@
+p, admin, institution, create
+p, admin, institution, read_all
+p, admin, institution, update_all
+p, admin, institution, delete_all
+p, institution_employee, institution, read
+p, institution_employee, institution, update
+p, donor, institution, read_all
